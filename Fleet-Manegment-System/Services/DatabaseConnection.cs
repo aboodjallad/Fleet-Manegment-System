@@ -50,6 +50,7 @@ namespace Fleet_Manegment_System.Services
                         if (_instance == null)
                         {
                             _instance = new DatabaseConnection();
+                            Console.WriteLine("Lestning.....");
                         }
                     }
                 }
