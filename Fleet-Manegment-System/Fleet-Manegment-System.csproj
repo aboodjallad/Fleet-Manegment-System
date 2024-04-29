@@ -25,4 +25,12 @@
 
 
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Modules\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="FPro">
+	    <HintPath>..\..\..\..\OneDrive\سطح المكتب\FPro.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
 </Project>
