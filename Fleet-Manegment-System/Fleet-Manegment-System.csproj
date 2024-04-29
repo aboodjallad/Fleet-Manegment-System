@@ -30,7 +30,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="FPro">
-	    <HintPath>..\..\..\..\OneDrive\سطح المكتب\FPro.dll</HintPath>
+	    <HintPath>..\..\..\..\Desktop\FPro.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 </Project>
