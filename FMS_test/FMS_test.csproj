@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <Reference Include="FPro">
-      <HintPath>..\..\..\..\Desktop\FPro.dll</HintPath>
+      <HintPath>..\..\..\..\OneDrive\سطح المكتب\FPro.dll</HintPath>
     </Reference>
   </ItemGroup>
 
