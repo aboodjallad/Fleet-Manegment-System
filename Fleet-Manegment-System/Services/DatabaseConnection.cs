@@ -18,7 +18,7 @@ namespace Fleet_Manegment_System.Services
         private static volatile DatabaseConnection? _instance;
         private static readonly object _lock = new object();
         private NpgsqlConnection? _connection;
-        private readonly string _connectionString = "Host=localhost; Port=5432; Database=ims; Username=postgres; Password=123";
+        private readonly string _connectionString = "Host=localhost; Port=5432; Database=abdalrahman_fms; Username=postgres; Password=123";
 
         private DatabaseConnection()
         {
