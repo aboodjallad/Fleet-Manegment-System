@@ -26,8 +26,6 @@ namespace Fleet_Manegment_System.Controllers
         public IActionResult AddDriver([FromBody] GVAR gvar)
         {
             
-
-            
             if (gvar.DicOfDic.TryGetValue("DriverInfo", out var driverInfo))
             {
                 _driverService.Add(new GVAR { DicOfDic = new ConcurrentDictionary<string, ConcurrentDictionary<string, string>> { ["DriverInfo"] = driverInfo } });
@@ -36,6 +34,19 @@ namespace Fleet_Manegment_System.Controllers
 
             return BadRequest("Driver information is missing");
         }
+
+        [HttpPost("delete")]
+        public IActionResult DeleteDriver([FromBody] GVAR gvar)
+        {
+            if (gvar.DicOfDic.TryGetValue("DriverInfo", out var driverInfo))
+            {
+                _driverService.Delete(new GVAR { DicOfDic = new ConcurrentDictionary<string, ConcurrentDictionary<string, string>> { ["DriverInfo"] = driverInfo } });
+                return Ok("Driver added successfully");
+            }
+
+            return BadRequest("Driver information is missing");
+        }
+
     }
 
 }

@@ -10,7 +10,7 @@ namespace Fleet_Manegment_System.Services
     internal interface IService
     {
         void Add(GVAR gvar);
-        void Delete();
+        void Delete(GVAR gvar);
         void Get();
         void Update();
     }
