@@ -1,54 +1,38 @@
 ﻿using FPro;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Npgsql;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Fleet_Manegment_System.Services
 {
-    public class DriverServices : IService
+    public class DriverServices : IDicOfDic , IDicOfDT
     {
 
-        public void Add(GVAR gvar)
+        public void AddDicOfDic(ConcurrentDictionary<string,string> dictionary)//done
         {
-            if (gvar.DicOfDic.ContainsKey("DriverInfo"))
-            {
-                InsertDriverInfo(gvar); 
-            }
-            else if (gvar.DicOfDT.ContainsKey("DriverTable"))
-            {
-                InsertDriverTable(gvar); 
-            }
-            else
-            {
-                Console.WriteLine("Driver information not found in the provided object.");
-            }
-        }
-
-        static private void InsertDriverInfo(GVAR gvar)
-        {
-            var driverInfo = gvar.DicOfDic["DriverInfo"];
-            var sql = "INSERT INTO driver (drivername, phonenumber) VALUES (@drivername, @phonenumber)";
             var connection = DatabaseConnection.Instance.Connection;
+            var sql = "INSERT INTO driver (drivername, phonenumber) VALUES (@drivername, @phonenumber)";
             try
             {
                 if (connection?.State != System.Data.ConnectionState.Open)
                 {
                     connection?.Open();
                 }
+                using var command = new NpgsqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@drivername", dictionary["drivername"]);
+                command.Parameters.AddWithValue("@phonenumber", dictionary["phonenumber"]);
+                command.ExecuteNonQuery();
 
-                using (var command = new NpgsqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@drivername", driverInfo["drivername"]);
-                    command.Parameters.AddWithValue("@phonenumber", driverInfo["phonenumber"]);
-
-                    command.ExecuteNonQuery();
-                }
             }
             catch (Exception ex)
             {
@@ -63,9 +47,9 @@ namespace Fleet_Manegment_System.Services
             }
         }
 
-        static private void InsertDriverTable(GVAR gvar)
+        public void AddDicOfDT(DataTable table) //done
         {
-            var driverTable = gvar.DicOfDT["DriverInfo"];
+            var sql = "INSERT INTO driver (drivername, phonenumber) VALUES (@drivername, @phonenumber)";
             var connection = DatabaseConnection.Instance.Connection;
             try
             {
@@ -74,15 +58,13 @@ namespace Fleet_Manegment_System.Services
                     connection?.Open();
                 }
 
-                foreach (DataRow row in driverTable.Rows)
+                foreach (DataRow row in table.Rows)
                 {
-                    using (var command = new NpgsqlCommand("INSERT INTO driver (drivername, phonenumber) VALUES (@drivername, @phonenumber)", connection))
-                    {
-                        command.Parameters.AddWithValue("@drivername", row["drivername"]);
-                        command.Parameters.AddWithValue("@phonenumber", row["phonenumber"]);
+                    using var command = new NpgsqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@drivername", row["drivername"]);
+                    command.Parameters.AddWithValue("@phonenumber", row["phonenumber"]);
 
-                        command.ExecuteNonQuery();
-                    }
+                    command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -96,46 +78,22 @@ namespace Fleet_Manegment_System.Services
                     connection.Close();
                 }
             }
+
         }
 
-
-        public void Delete(GVAR gvar)
+        public void DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
-            if (gvar.DicOfDic.ContainsKey("DriverInfo"))
-            {
-                DeleteDriverInfo(gvar);
-            }
-            else if (gvar.DicOfDT.ContainsKey("DriverTable"))
-            {
-                DeleteDriverTable(gvar);
-            }
-            else
-            {
-                Console.WriteLine("Driver information not found in the provided object.");
-            }
-        }
-
-        static private void DeleteDriverInfo(GVAR gvar)
-        {
-
-            var driverInfo = gvar.DicOfDic["DriverInfo"];
             var sql = "DELETE FROM driver WHERE driverid = @driverid";
             var connection = DatabaseConnection.Instance.Connection;
-
-            string numberStr = driverInfo["driverid"];
+            string numberStr = dictionary["driverid"];
             int driverid = int.Parse(numberStr);
-
             try
             {
-                using (var command = new NpgsqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@driverid", driverid);
-
-                    connection?.Open();
-                    command.ExecuteNonQuery();
-                    Console.WriteLine("Item deleted successfully");
-
-                }
+                using var command = new NpgsqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@driverid", driverid);
+                connection?.Open();
+                command.ExecuteNonQuery();
+                Console.WriteLine("driver with ID: " + driverid + " deleted successfully");
             }
             catch (Exception ex)
             {
@@ -148,10 +106,10 @@ namespace Fleet_Manegment_System.Services
                     connection.Close();
                 }
             }
-        }
-        static private void DeleteDriverTable(GVAR gvar)
+        }//done
+
+        public void DeleteDicOfDT(DataTable table)
         {
-            var driverTable = gvar.DicOfDT["DriverInfo"];
             var connection = DatabaseConnection.Instance.Connection;
 
             try
@@ -161,15 +119,13 @@ namespace Fleet_Manegment_System.Services
                     connection?.Open();
                 }
 
-                foreach (DataRow row in driverTable.Rows)
+                foreach (DataRow row in table.Rows)
                 {
                     string numberStr = (string)row["driverid"];
                     int driverid = int.Parse(numberStr);
-                    using (var command = new NpgsqlCommand("DELETE FROM driver WHERE driverid = @driverid", connection))
-                    {
-                        command.Parameters.AddWithValue("@driverid",driverid);
-                        command.ExecuteNonQuery();
-                    }
+                    using var command = new NpgsqlCommand("DELETE FROM driver WHERE driverid = @driverid", connection);
+                    command.Parameters.AddWithValue("@driverid", driverid);
+                    command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -183,15 +139,98 @@ namespace Fleet_Manegment_System.Services
                     connection.Close();
                 }
             }
+        }//done
+
+        public DataTable? GetDicOfDT(DataTable table, string key)//done
+        {
+            var sql = "SELECT * FROM driver WHERE driverid = @driverid";
+            var connection = DatabaseConnection.Instance.Connection;
+            string tableName = key;
+            try
+            {
+                DataTable resultTable = new(tableName);
+                resultTable.Columns.Add("driverid", typeof(BigInteger));
+                resultTable.Columns.Add("drivername", typeof(string));
+                resultTable.Columns.Add("phonenumber", typeof(string));
+                foreach (DataRow row in table.Rows)
+                {
+                    var driverid = (BigInteger)row["driverId"];
+                    using var command = new NpgsqlCommand(sql, connection);
+                    DataTable dt = new();
+                    command.Parameters.AddWithValue("@driverid", driverid);
+                    connection?.Open();
+                    command.ExecuteNonQuery();
+                    using var adapter = new NpgsqlDataAdapter(command);
+                    adapter.Fill(dt);
+                    resultTable.ImportRow(dt.Rows[0]);
+
+                }
+                return resultTable;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            
         }
-        public void Get()
+
+        public ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string,string> dictionary, string key)
+        {
+            var sql = "SELECT * FROM driver WHERE driverid = @driverid";
+            var connection = DatabaseConnection.Instance.Connection;
+
+            try
+            {
+                string numberStr = dictionary["driverid"];
+                int driverid = int.Parse(numberStr);
+                DataTable dt = new();
+                var newDictionary = new ConcurrentDictionary<string, string>()
+                {
+                    ["drivername"] = "",
+                    ["phonenumber"] = ""
+                };
+
+                using (var command = new NpgsqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@driverid", driverid);
+                    connection?.Open();
+                    command.ExecuteNonQuery();
+                    using (var adapter = new NpgsqlDataAdapter(command))
+                    {
+                        adapter.Fill(dt);
+                    }
+                    var drivername = dt.Rows[0]["drivername"].ToString();
+                    var phonenumber = dt.Rows[0]["phonenumber"].ToString();
+                    newDictionary["drivername"] = drivername;
+                    newDictionary["phonenumber"] = phonenumber;
+                }
+                return newDictionary;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                if (connection?.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }//done
+
+        public void UpdateDicOfDT()
         {
             throw new NotImplementedException();
         }
 
-        public void Update()
+        public void UpdateDicOfDic()
         {
             throw new NotImplementedException();
         }
+
     }
 }
+

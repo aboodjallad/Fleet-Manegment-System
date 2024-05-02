@@ -30,7 +30,7 @@ namespace Fleet_Manegment_System.Controllers
 
             if (gvar.DicOfDic.TryGetValue("DriverInfo", out var driverInfo))
             {
-                _driverService.Add(new GVAR { DicOfDic = new ConcurrentDictionary<string, ConcurrentDictionary<string, string>> { ["DriverInfo"] = driverInfo } });
+                //_driverService.Add(new GVAR { DicOfDic = new ConcurrentDictionary<string, ConcurrentDictionary<string, string>> { ["DriverInfo"] = driverInfo } });
                 return Ok("Driver added successfully");
             }
 

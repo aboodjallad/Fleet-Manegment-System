@@ -1,5 +1,6 @@
 ﻿using FPro;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,24 +8,32 @@ using System.Threading.Tasks;
 
 namespace Fleet_Manegment_System.Services
 {
-    internal class VehiclesService : IService
+    internal class VehiclesService : IDicOfDic
     {
-        public void Add(GVAR gvar)
+        
+
+        public void AddDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete()
+        
+
+        public void DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             throw new NotImplementedException();
         }
 
-        public void Get()
+       
+
+        public ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string, string> dictionary, string key)
         {
             throw new NotImplementedException();
         }
 
-        public void Update()
+      
+
+        public void UpdateDicOfDic()
         {
             throw new NotImplementedException();
         }
