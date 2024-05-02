@@ -11,10 +11,27 @@ namespace Fleet_Manegment_System.Services.ServicesController
 {
     internal class DeleteController : IRun
     {
-        
-        public override void  HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT)
+
+        public override void HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT)
         {
-            throw new NotImplementedException();
+            IDicOfDT dicService;
+            int skippedCounter = 0;
+            foreach (var dic in dicOfDT)
+            {
+                DataTable table = dic.Value;
+                if (table == null)
+                {
+                    Console.WriteLine("Dictionary cant be empty \n Skipped");
+                    skippedCounter += 1;
+                    continue;
+                }
+                if (dic.Key == "Driver")
+                {
+                    dicService = new DriverServices();
+                    dicService.DeleteDicOfDT(table);
+                }
+            }
+            Console.WriteLine("drivers deleted successfully \n" + skippedCounter + " drivers are skipped\n");
         }
 
         public override void  HandleDicOfDic(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dicOfDic)

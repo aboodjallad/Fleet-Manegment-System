@@ -17,23 +17,17 @@ namespace Fleet_Manegment_System.Services
             throw new NotImplementedException();
         }
 
-        
-
         public void DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             throw new NotImplementedException();
         }
-
-       
 
         public ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string, string> dictionary, string key)
         {
             throw new NotImplementedException();
         }
 
-      
-
-        public void UpdateDicOfDic()
+        public void UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             throw new NotImplementedException();
         }

@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <Reference Include="FPro">
-      <HintPath>..\..\..\..\Desktop\FPro.dll</HintPath>
+      <HintPath>..\..\..\..\OneDrive\سطح المكتب\FPro.dll</HintPath>
     </Reference>
   </ItemGroup>
 

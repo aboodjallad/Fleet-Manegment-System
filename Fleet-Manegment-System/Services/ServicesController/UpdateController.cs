@@ -5,14 +5,14 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Fleet_Manegment_System.Services;
 namespace Fleet_Manegment_System.Services.ServicesController
 {
     internal class UpdateController : IRun
     {
         public override void HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT)
         {
-            IDicOfDic dicService;
+            IDicOfDT dicService;
             int skippedCounter = 0;
             foreach (var dic in dicOfDT)
             {
