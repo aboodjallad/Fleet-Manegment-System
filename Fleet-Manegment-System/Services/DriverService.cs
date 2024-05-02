@@ -172,7 +172,14 @@ namespace Fleet_Manegment_System.Services
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return null;
             }
-            
+            finally
+            {
+                if (connection?.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
         }
 
         public ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string,string> dictionary, string key)
@@ -221,15 +228,68 @@ namespace Fleet_Manegment_System.Services
             }
         }//done
 
-        public void UpdateDicOfDT()
+        public void UpdateDicOfDT(DataTable table)
         {
-            throw new NotImplementedException();
-        }
+            var connection = DatabaseConnection.Instance.Connection;
+            var sql = "UPDATE driver SET drivername = @drivername, phonenumber = @phonenumber WHERE driverid = @driverid";
+            try
+            {
+                if (connection?.State != System.Data.ConnectionState.Open)
+                {
+                    connection?.Open();
+                }
+                foreach (DataRow row in table.Rows)
+                {
+                    using var command = new NpgsqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@drivername", row["drivername"]);
+                    command.Parameters.AddWithValue("@phonenumber", row["phonenumber"]);
+                    command.Parameters.AddWithValue("@driverid", row["driverid"]);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch(Exception  ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                if (connection?.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }//done
 
-        public void UpdateDicOfDic()
+        public void UpdateDicOfDic(ConcurrentDictionary<string,string> dictionary)
         {
-            throw new NotImplementedException();
-        }
+            var connection = DatabaseConnection.Instance.Connection;
+            var sql = "UPDATE driver SET drivername = @drivername, phonenumber = @phonenumber WHERE driverid = @driverid";
+            try
+            {
+                if (connection?.State != System.Data.ConnectionState.Open)
+                {
+                    connection?.Open();
+                }
+                string numberStr = dictionary["driverid"];
+                int driverid = int.Parse(numberStr);
+                using var command = new NpgsqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@drivername", dictionary["drivername"]);
+                command.Parameters.AddWithValue("@phonenumber", dictionary["phonenumber"]);
+                command.Parameters.AddWithValue("@driverid",driverid);
+                command.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                if (connection?.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }//done
 
     }
 }

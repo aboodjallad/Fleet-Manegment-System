@@ -14,6 +14,6 @@ namespace Fleet_Manegment_System.Services
         void AddDicOfDT(DataTable table);
         void DeleteDicOfDT(DataTable table);
         DataTable? GetDicOfDT(DataTable table,string key);
-        void UpdateDicOfDT();
+        void UpdateDicOfDT(DataTable table);
     }
 }
