@@ -17,6 +17,8 @@
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
+
 	</ItemGroup>
 
 	<ItemGroup>
@@ -29,7 +31,8 @@
 
 	<ItemGroup>
 	  <Reference Include="FPro">
-	    <HintPath>..\..\..\..\OneDrive\سطح المكتب\FPro.dll</HintPath>
+	    <HintPath>..\..\..\..\Desktop\FPro.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 </Project>
+ 

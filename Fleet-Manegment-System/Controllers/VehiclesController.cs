@@ -1,42 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Fleet_Manegment_System.Services;
+﻿using Microsoft.AspNetCore.Mvc;
 using FPro;
-using System.Collections.Concurrent;
+using Fleet_Manegment_System.Services.ServicesController;
 
 namespace Fleet_Manegment_System.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    internal class VehiclesController : ControllerBase
+    public class VehiclesController : ControllerBase
     {
-        private readonly DriverServices _driverService;
+        private readonly IRun _addVehicleController = new AddController();
+        private readonly IRun _deleteVehicleController = new DeleteController();
+        private readonly IRun _updateVehicleController = new UpdateController();
+        private readonly IRun _getVehicleController = new GetController();
 
-        public VehiclesController(DriverServices driverService)
+        
+        [HttpPost("addVehicle")]
+        public IActionResult AddVehicle([FromBody] GVAR gvar)
         {
-            _driverService = driverService;
+            if (gvar == null)
+                return BadRequest("Invalid GVAR provided.");
+
+            _addVehicleController.Run(gvar);
+            return Ok("Vehicle added successfully.");
         }
 
-        [HttpPost("add")]
-        public IActionResult AddDriver([FromBody] GVAR gvar)
+        [HttpDelete("deleteVehicle")]
+        public IActionResult DeleteVehicle([FromBody] GVAR gvar)
         {
+            if (gvar == null)
+                return BadRequest("Invalid GVAR provided.");
 
+            _deleteVehicleController.Run(gvar);
+            return Ok("Vehicle deleted successfully.");
+        }
 
+        [HttpPut("updateVehicle")]
+        public IActionResult UpdateVehicle([FromBody] GVAR gvar)
+        {
+            if (gvar == null)
+                return BadRequest("Invalid GVAR provided.");
 
-            if (gvar.DicOfDic.TryGetValue("DriverInfo", out var driverInfo))
-            {
-                //_driverService.Add(new GVAR { DicOfDic = new ConcurrentDictionary<string, ConcurrentDictionary<string, string>> { ["DriverInfo"] = driverInfo } });
-                return Ok("Driver added successfully");
-            }
-
-            return BadRequest("Driver information is missing");
+            _updateVehicleController.Run(gvar);
+            return Ok("Vehicle updated successfully.");
         }
     }
-
 }
-

@@ -1,13 +1,9 @@
-﻿using FPro;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using Fleet_Manegment_System.Services.Driver;
+using Fleet_Manegment_System.Services.General;
+using Fleet_Manegment_System.Services.Vehichles;
+using Fleet_Manegment_System.Services.Vehicle;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fleet_Manegment_System.Services.ServicesController
 {
@@ -17,26 +13,47 @@ namespace Fleet_Manegment_System.Services.ServicesController
         public override void HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT)
         {
             IDicOfDT dtService;
+            int skippedCounter = 0;
+            int doneCounter = 0;
 
             foreach (var dt in dicOfDT)
             {
-                if (dt.Key == "Drivers")
+                var table = dt.Value;
+                if (table == null)
                 {
-                    var table = dt.Value;
+                    Console.WriteLine("table cant be empty \n Skipped");
+                    skippedCounter += 1;
+                    continue;
+                }
+                if (dt.Key.Contains("Drivers")) 
+                {
                     dtService = new DriverServices();
                     dtService.AddDicOfDT(table);
+                    doneCounter += 1;
                 }
                 else if (dt.Key == "Vehicles")
                 {
-                    // Assuming a method to handle vehicle data
+                    dtService = new VehicleServices();
+                    dtService.AddDicOfDT(table);
+                    doneCounter += 1;
+                }
+                else if (dt.Key == "VehiclesInformation")
+                {
+                    dtService = new VehicleInformation();
+                    dtService.AddDicOfDT(table);
+                    doneCounter += 1;
                 }
             }
+            Console.WriteLine(doneCounter + "Tabels added successfully and " + skippedCounter + " are skipped\n");
+
         }//done
 
         public override void HandleDicOfDic(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dicOfDic)
         {
             IDicOfDic dicService;
             int skippedCounter = 0;
+            int doneCounter = 0;
+
             foreach (var dic in dicOfDic)
             {
                 var dictionary = dic.Value;
@@ -46,14 +63,26 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     skippedCounter += 1;
                     continue;
                 }
-                if (dic.Key == "Driver")
+                if (dic.Key.Contains("Driver"))
                 {
                     dicService = new DriverServices();
                     dicService.AddDicOfDic(dictionary);
+                    doneCounter += 1;
                 }
-                
+                else if (dic.Key == "Vehicles")
+                {
+                    dicService = new VehicleServices();
+                    dicService.AddDicOfDic(dictionary);
+                    doneCounter += 1;
+                }
+                else if (dic.Key == "VehiclesInformation")
+                {
+                    dicService = new VehicleInformation();
+                    dicService.AddDicOfDic(dictionary);
+                    doneCounter += 1;
+                }
             }
-            Console.WriteLine("drivers added successfully \n" + skippedCounter + " drivers are skipped\n");
+            Console.WriteLine(doneCounter+ "Dictionarys added successfully and " + skippedCounter + " are skipped\n");
         }//done
     }
 }

@@ -1,46 +1,42 @@
-﻿using FPro;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Fleet_Manegment_System.Services.General;
 using Npgsql;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using FPro;
+using System.Collections.Generic;
 
-namespace Fleet_Manegment_System.Services
+namespace Fleet_Manegment_System.Services.Driver
 {
-    public class DriverServices : IDicOfDic , IDicOfDT
+    public class DriverServices : IDicOfDic, IDicOfDT
     {
 
-        public void AddDicOfDic(ConcurrentDictionary<string,string> dictionary)//done
+        public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
         {
             var connection = DatabaseConnection.Instance.Connection;
             var sql = "INSERT INTO driver (drivername, phonenumber) VALUES (@drivername, @phonenumber)";
             try
             {
-                if (connection?.State != System.Data.ConnectionState.Open)
+                if (connection?.State != ConnectionState.Open)
                 {
                     connection?.Open();
                 }
+                _ = BigInteger.TryParse(dictionary["phonenumber"].ToString(), out BigInteger phonenumber);
                 using var command = new NpgsqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@drivername", dictionary["drivername"]);
-                command.Parameters.AddWithValue("@phonenumber", dictionary["phonenumber"]);
+                command.Parameters.AddWithValue("@phonenumber", phonenumber);
                 command.ExecuteNonQuery();
+                return true;
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+                return false;
             }
             finally
             {
-                if (connection?.State == System.Data.ConnectionState.Open)
+                if (connection?.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
@@ -53,16 +49,17 @@ namespace Fleet_Manegment_System.Services
             var connection = DatabaseConnection.Instance.Connection;
             try
             {
-                if (connection?.State != System.Data.ConnectionState.Open)
+                if (connection?.State != ConnectionState.Open)
                 {
                     connection?.Open();
                 }
 
                 foreach (DataRow row in table.Rows)
                 {
+                    _ = BigInteger.TryParse(row["phonenumber"].ToString(), out BigInteger phonenumber);
                     using var command = new NpgsqlCommand(sql, connection);
                     command.Parameters.AddWithValue("@drivername", row["drivername"]);
-                    command.Parameters.AddWithValue("@phonenumber", row["phonenumber"]);
+                    command.Parameters.AddWithValue("@phonenumber", phonenumber);
 
                     command.ExecuteNonQuery();
                 }
@@ -73,7 +70,7 @@ namespace Fleet_Manegment_System.Services
             }
             finally
             {
-                if (connection?.State == System.Data.ConnectionState.Open)
+                if (connection?.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
@@ -81,27 +78,35 @@ namespace Fleet_Manegment_System.Services
 
         }
 
-        public void DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)
+        public bool DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
-            var sql = "DELETE FROM driver WHERE driverid = @driverid";
+            var sql2 = "DELETE FROM driver WHERE driverid = @driverid";
+            var sql1 = "UPDATE VehiclesInformations SET driverid = 9999 WHERE driverid = @driverid";
             var connection = DatabaseConnection.Instance.Connection;
-            string numberStr = dictionary["driverid"];
-            int driverid = int.Parse(numberStr);
+            _ = BigInteger.TryParse(dictionary["driverid"].ToString(), out BigInteger driverid);
             try
             {
-                using var command = new NpgsqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@driverid", driverid);
-                connection?.Open();
-                command.ExecuteNonQuery();
+                if (connection?.State != ConnectionState.Open)
+                {
+                    connection?.Open();
+                }
+                using var command1 = new NpgsqlCommand(sql1, connection);
+                using var command2 = new NpgsqlCommand(sql2, connection);
+                command1.Parameters.AddWithValue("@driverid", driverid);
+                command2.Parameters.AddWithValue("@driverid", driverid);
+                command1.ExecuteNonQuery();
+                command2.ExecuteNonQuery();
                 Console.WriteLine("driver with ID: " + driverid + " deleted successfully");
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+                return false;
             }
             finally
             {
-                if (connection?.State == System.Data.ConnectionState.Open)
+                if (connection?.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
@@ -114,15 +119,14 @@ namespace Fleet_Manegment_System.Services
 
             try
             {
-                if (connection?.State != System.Data.ConnectionState.Open)
+                if (connection?.State != ConnectionState.Open)
                 {
                     connection?.Open();
                 }
 
                 foreach (DataRow row in table.Rows)
                 {
-                    string numberStr = (string)row["driverid"];
-                    int driverid = int.Parse(numberStr);
+                    _ = BigInteger.TryParse(row["driverid"].ToString(), out BigInteger driverid);
                     using var command = new NpgsqlCommand("DELETE FROM driver WHERE driverid = @driverid", connection);
                     command.Parameters.AddWithValue("@driverid", driverid);
                     command.ExecuteNonQuery();
@@ -134,7 +138,7 @@ namespace Fleet_Manegment_System.Services
             }
             finally
             {
-                if (connection?.State == System.Data.ConnectionState.Open)
+                if (connection?.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
@@ -145,20 +149,24 @@ namespace Fleet_Manegment_System.Services
         {
             var sql = "SELECT * FROM driver WHERE driverid = @driverid";
             var connection = DatabaseConnection.Instance.Connection;
-            string tableName = key;
+
+            if(connection?.State != ConnectionState.Open)
+            {
+                connection?.Open();
+            }
+
             try
             {
-                DataTable resultTable = new(tableName);
-                resultTable.Columns.Add("driverid", typeof(BigInteger));
+                DataTable resultTable = new(key);
+                resultTable.Columns.Add("driverid", typeof(string));
                 resultTable.Columns.Add("drivername", typeof(string));
                 resultTable.Columns.Add("phonenumber", typeof(string));
                 foreach (DataRow row in table.Rows)
                 {
-                    var driverid = (BigInteger)row["driverId"];
+                    _ = BigInteger.TryParse(row["driverid"].ToString(), out BigInteger driverid);
                     using var command = new NpgsqlCommand(sql, connection);
                     DataTable dt = new();
-                    command.Parameters.AddWithValue("@driverid", driverid);
-                    connection?.Open();
+                    command.Parameters.AddWithValue("@driverid",driverid);
                     command.ExecuteNonQuery();
                     using var adapter = new NpgsqlDataAdapter(command);
                     adapter.Fill(dt);
@@ -167,14 +175,14 @@ namespace Fleet_Manegment_System.Services
                 }
                 return resultTable;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return null;
             }
             finally
             {
-                if (connection?.State == System.Data.ConnectionState.Open)
+                if (connection?.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
@@ -182,17 +190,20 @@ namespace Fleet_Manegment_System.Services
 
         }
 
-        public ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string,string> dictionary, string key)
+        public ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             var sql = "SELECT * FROM driver WHERE driverid = @driverid";
             var connection = DatabaseConnection.Instance.Connection;
 
             try
             {
-                string numberStr = dictionary["driverid"];
-                int driverid = int.Parse(numberStr);
+                if (connection?.State != ConnectionState.Open)
+                {
+                    connection?.Open();
+                }
+                _ = BigInteger.TryParse(dictionary["driverid"].ToString(), out BigInteger driverid);
                 DataTable dt = new();
-                var newDictionary = new ConcurrentDictionary<string, string>()
+                var result = new ConcurrentDictionary<string, string>()
                 {
                     ["drivername"] = "",
                     ["phonenumber"] = ""
@@ -201,7 +212,6 @@ namespace Fleet_Manegment_System.Services
                 using (var command = new NpgsqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@driverid", driverid);
-                    connection?.Open();
                     command.ExecuteNonQuery();
                     using (var adapter = new NpgsqlDataAdapter(command))
                     {
@@ -209,10 +219,13 @@ namespace Fleet_Manegment_System.Services
                     }
                     var drivername = dt.Rows[0]["drivername"].ToString();
                     var phonenumber = dt.Rows[0]["phonenumber"].ToString();
-                    newDictionary["drivername"] = drivername;
-                    newDictionary["phonenumber"] = phonenumber;
+                    if (drivername != null && phonenumber != null)
+                    {
+                        result["drivername"] = drivername;
+                        result["phonenumber"] = phonenumber;
+                    }
                 }
-                return newDictionary;
+                return result;
             }
             catch (Exception ex)
             {
@@ -221,7 +234,7 @@ namespace Fleet_Manegment_System.Services
             }
             finally
             {
-                if (connection?.State == System.Data.ConnectionState.Open)
+                if (connection?.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
@@ -234,62 +247,115 @@ namespace Fleet_Manegment_System.Services
             var sql = "UPDATE driver SET drivername = @drivername, phonenumber = @phonenumber WHERE driverid = @driverid";
             try
             {
-                if (connection?.State != System.Data.ConnectionState.Open)
+                if (connection?.State != ConnectionState.Open)
                 {
                     connection?.Open();
                 }
+                
                 foreach (DataRow row in table.Rows)
                 {
+
+
+                    
+                    _ = BigInteger.TryParse(row["driverid"].ToString(), out BigInteger driverid);
+                    _ = BigInteger.TryParse(row["phonenumber"].ToString(), out BigInteger phonenumber);
                     using var command = new NpgsqlCommand(sql, connection);
                     command.Parameters.AddWithValue("@drivername", row["drivername"]);
-                    command.Parameters.AddWithValue("@phonenumber", row["phonenumber"]);
-                    command.Parameters.AddWithValue("@driverid", row["driverid"]);
+                    command.Parameters.AddWithValue("@phonenumber", phonenumber);
+                    command.Parameters.AddWithValue("@driverid", driverid);
                     command.ExecuteNonQuery();
                 }
             }
-            catch(Exception  ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
             finally
             {
-                if (connection?.State == System.Data.ConnectionState.Open)
+                if (connection?.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
             }
         }//done
 
-        public void UpdateDicOfDic(ConcurrentDictionary<string,string> dictionary)
+        public void UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             var connection = DatabaseConnection.Instance.Connection;
             var sql = "UPDATE driver SET drivername = @drivername, phonenumber = @phonenumber WHERE driverid = @driverid";
             try
             {
-                if (connection?.State != System.Data.ConnectionState.Open)
+                if (connection?.State != ConnectionState.Open)
                 {
                     connection?.Open();
                 }
-                string numberStr = dictionary["driverid"];
-                int driverid = int.Parse(numberStr);
+
+                _ = BigInteger.TryParse(dictionary["driverid"].ToString(), out BigInteger driverid);
+                _ = BigInteger.TryParse(dictionary["phonenumber"].ToString(), out BigInteger phonenumber);
+
+
                 using var command = new NpgsqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@drivername", dictionary["drivername"]);
-                command.Parameters.AddWithValue("@phonenumber", dictionary["phonenumber"]);
-                command.Parameters.AddWithValue("@driverid",driverid);
+                command.Parameters.AddWithValue("@phonenumber", phonenumber);
+                command.Parameters.AddWithValue("@driverid", driverid);
                 command.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
             finally
             {
-                if (connection?.State == System.Data.ConnectionState.Open)
+                if (connection?.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
             }
         }//done
+
+        public GVAR? GetDrivers()//done
+        {
+            var gvar = new GVAR();
+            var sql = "SELECT * FROM driver";
+            DataTable dt = new();
+            var connection = DatabaseConnection.Instance.Connection;
+
+            if (connection?.State != ConnectionState.Open)
+            {
+                connection?.Open();
+            }
+
+            try
+            {
+                using var command = new NpgsqlCommand(sql, connection);
+                command.ExecuteNonQuery();
+                using var adapter = new NpgsqlDataAdapter(command);
+                adapter.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    gvar.DicOfDT.TryAdd("Drivers", dt);
+                }
+                return gvar;
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                if (connection?.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+        }
+        private string ConvertDataTableToJson(DataTable dt)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(dt, Newtonsoft.Json.Formatting.Indented);
+        }
 
     }
 }

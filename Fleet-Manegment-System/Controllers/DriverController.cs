@@ -1,53 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Fleet_Manegment_System.Services;
+﻿using Microsoft.AspNetCore.Mvc;
 using FPro;
 using System.Collections.Concurrent;
+using Fleet_Manegment_System.Services.Driver;
+using System.Data;
+using Fleet_Manegment_System.Services.ServicesController;
 
 namespace Fleet_Manegment_System.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    internal class DriverController : ControllerBase
+    public class DriverController : ControllerBase
     {
-            private readonly DriverServices _driverService;
+        private readonly DriverServices _driverService = new();
+        private readonly IRun _addController =  new AddController();
+        private readonly IRun _deleteController = new DeleteController();
+        private readonly IRun _updateController = new UpdateController();
 
-            public DriverController(DriverServices driverService)
-            {
-                _driverService = driverService;
-            }
+       
 
         [HttpPost("addDriver")]
         public IActionResult AddDriver([FromBody] GVAR gvar)
         {
-            
-            if (gvar.DicOfDic.TryGetValue("DriverInfo", out var driverInfo))
+            try
             {
-              //  _driverService.Add(new GVAR { DicOfDic = new ConcurrentDictionary<string, ConcurrentDictionary<string, string>> { ["DriverInfo"] = driverInfo } });
-                return Ok("Driver added successfully");
+                _addController.Run(gvar);
+                return Ok("Driver added successfully.");
             }
-
-            return BadRequest("Driver information is missing");
+            catch (Exception ex)
+            {
+                return BadRequest($"Error adding driver: {ex.Message}");
+            }
         }
 
         [HttpDelete("deleteDriver")]
         public IActionResult DeleteDriver([FromBody] GVAR gvar)
         {
-            if (gvar.DicOfDic.TryGetValue("DriverInfo", out var driverInfo))
+            try
             {
-              // _driverService.Delete(new GVAR { DicOfDic = new ConcurrentDictionary<string, ConcurrentDictionary<string, string>> { ["DriverInfo"] = driverInfo } });
-                return Ok("Driver added successfully");
+                _deleteController.Run(gvar);
+                return Ok();
             }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error deleting driver: {ex.Message}");
+            }
+        }
 
-            return BadRequest("Driver information is missing");
+        [HttpGet("getAllDrivers")]
+        [Produces("application/json")]
+        public ActionResult<GVAR> GetAllDrivers()
+        {
+            var result = _driverService.GetDrivers();
+
+            if (result == null || result.DicOfDT.Count == 0)
+            {
+                return NotFound("No drivers found.");
+            }
+            return Ok(result);
+        }
+
+
+        [HttpPut("updateDriver")]
+        public IActionResult UpdateDriver([FromBody] GVAR gvar)
+        {
+            try
+            {
+                _updateController.Run(gvar);
+                return Ok("Driver updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error updating driver: {ex.Message}");
+            }
         }
 
     }
-
 }
-
