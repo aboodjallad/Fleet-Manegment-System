@@ -14,7 +14,7 @@ namespace Fleet_Manegment_System.Services.ServicesController
         {
             return gvar;
         }
-        public override void HandleDicOfDic(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dicOfDic)
+        public override bool HandleDicOfDic(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dicOfDic)
         {
             IDicOfDic dicService;
             GVAR result = new();
@@ -29,7 +29,7 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     skippedCounter += 1;
                     continue;
                 }
-                if (dic.Key == "Driver")
+                if (dic.Key.Contains("Driver"))
                 {
                     var key = dic.Key;
                     dicService = new DriverServices();
@@ -41,10 +41,9 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     catch (Exception ex)
                     {
                         Console.WriteLine($"An error occurred: {ex.Message}");
-
                     }
                 }
-                else if (dic.Key == "Vehicles")
+                else if (dic.Key.Contains("Vehicles"))
                 {
                     var key = dic.Key;
                     dicService = new VehicleServices();
@@ -56,15 +55,16 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     catch (Exception ex)
                     {
                         Console.WriteLine($"An error occurred: {ex.Message}");
-
                     }
                 }
             }
+
             Send(result);
             Console.WriteLine(skippedCounter + " Dictionarys are skipped\n");
+            return true;
         }//done
 
-        public override void HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT)
+        public override bool HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT)
         {
             IDicOfDT dtService;
             int skippedCounter = 0;
@@ -77,7 +77,7 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     skippedCounter += 1;
                     continue;
                 }
-                if (dt.Key == "Drivers")
+                if (dt.Key.Contains("Drivers"))
                 {
                     var key = dt.Key;
                     var table = dt.Value;
@@ -86,14 +86,15 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     try
                     {
                         result.DicOfDT.TryAdd(key, newDataTable);
+                        return true;
                     }
                     catch(Exception ex)
                     {
                         Console.WriteLine($"An error occurred: {ex.Message}");
-
+                        return false;
                     }
                 }
-                else if (dt.Key == "Vehicles")
+                else if (dt.Key.Contains("Vehicles"))
                 {
                     var key = dt.Key;
                     var table = dt.Value;
@@ -102,17 +103,18 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     try
                     {
                         result.DicOfDT.TryAdd(key, newDataTable);
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine($"An error occurred: {ex.Message}");
-
+                        return false;
                     }
                 }
             }
             Send(result);
             Console.WriteLine(skippedCounter + " tabels are skipped\n");
-
+            return true; 
         }//done
     }
 }

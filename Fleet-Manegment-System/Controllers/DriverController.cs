@@ -16,21 +16,25 @@ namespace Fleet_Manegment_System.Controllers
         private readonly IRun _deleteController = new DeleteController();
         private readonly IRun _updateController = new UpdateController();
 
-       
+
 
         [HttpPost("addDriver")]
         public IActionResult AddDriver([FromBody] GVAR gvar)
         {
             try
             {
-                _addController.Run(gvar);
+                if (_addController.Run(gvar))
+                { 
                 return Ok("Driver added successfully.");
+                }
+                return BadRequest($"Error adding driver");
+
             }
             catch (Exception ex)
             {
                 return BadRequest($"Error adding driver: {ex.Message}");
             }
-        }
+        } // DONE
 
         [HttpDelete("deleteDriver")]
         public IActionResult DeleteDriver([FromBody] GVAR gvar)
@@ -44,7 +48,7 @@ namespace Fleet_Manegment_System.Controllers
             {
                 return BadRequest($"Error deleting driver: {ex.Message}");
             }
-        }
+        }//done
 
         [HttpGet("getAllDrivers")]
         [Produces("application/json")]
@@ -57,7 +61,7 @@ namespace Fleet_Manegment_System.Controllers
                 return NotFound("No drivers found.");
             }
             return Ok(result);
-        }
+        }//done
 
 
         [HttpPut("updateDriver")]
@@ -65,13 +69,20 @@ namespace Fleet_Manegment_System.Controllers
         {
             try
             {
-                _updateController.Run(gvar);
-                return Ok("Driver updated successfully.");
+                if (_updateController.Run(gvar))
+                {
+                    return Ok("Driver updated successfully.");
+                }
+                else
+                    return BadRequest($"Error updating driver");
+
             }
+
             catch (Exception ex)
             {
                 return BadRequest($"Error updating driver: {ex.Message}");
             }
+
         }
 
     }

@@ -48,7 +48,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
         {
-            var sql = "INSERT INTO vehicles (vehiclenumber, vehicletype) VALUES (@vehicleNumber, @vehicleType)";
+            var sql = "INSERT INTO vehicles (vehiclenumber, vehicletype) VALUES (@vehicleNumber, @vehicleType);";
             var connection = GetConnection();
             try
             {
@@ -80,7 +80,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public bool DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
         {
-            var sql = "DELETE FROM vehicles WHERE vehicleid = @vehicleId";
+            var sql = "DELETE FROM vehicles WHERE vehicleid = @vehicleId;";
             var connection = GetConnection();
             try
             {
@@ -228,7 +228,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
             }
         }
 
-        public void UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
+        public bool UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             var sql = "UPDATE vehicles SET vehiclenumber = @vehicleNumber, vehicletype = @vehicleType WHERE vehicleid = @vehicleId";
             var connection = GetConnection();
@@ -244,12 +244,14 @@ namespace Fleet_Manegment_System.Services.Vehicle
                 using var command = new NpgsqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@vehicleId", vehicleid);
                 command.Parameters.AddWithValue("@vehicleNumber", vehiclenumber);
-                command.Parameters.AddWithValue("@vehicleType", dictionary["vehicleType"]);
+                command.Parameters.AddWithValue("@vehicleType", dictionary["vehicletype"]);
                 command.ExecuteNonQuery();
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+                return false;
             }
             finally
             {

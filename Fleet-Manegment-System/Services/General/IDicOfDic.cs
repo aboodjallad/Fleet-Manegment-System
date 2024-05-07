@@ -13,6 +13,6 @@ namespace Fleet_Manegment_System.Services.General
         bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary);
         bool DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary);
         ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string, string> dictionary);
-        void UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary);
+        bool UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary);
     }
 }

@@ -9,7 +9,7 @@ namespace Fleet_Manegment_System.Services.ServicesController
 {
     internal class UpdateController : IRun
     {
-        public override void HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT)
+        public override bool HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT)
         {
             IDicOfDT dtService;
             int skippedCounter = 0;
@@ -24,7 +24,7 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     skippedCounter += 1;
                     continue;
                 }
-                if (dt.Key == "Driver")
+                if (dt.Key.Contains("Driver"))
                 {
                     dtService = new DriverServices();
                     dtService.UpdateDicOfDT(table);
@@ -44,9 +44,10 @@ namespace Fleet_Manegment_System.Services.ServicesController
                 }
             }
             Console.WriteLine(doneCounter + "Tabels added successfully and " + skippedCounter + " are skipped\n");
+            return true;
         }
 
-        public override void HandleDicOfDic(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dicOfDic)
+        public override bool HandleDicOfDic(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dicOfDic)
         {
             IDicOfDic dicService;
             int skippedCounter = 0;
@@ -61,27 +62,28 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     skippedCounter += 1;
                     continue;
                 }
-                if (dic.Key == "Driver")
+                if (dic.Key.Contains("Driver"))
                 {
                     dicService = new DriverServices();
                     dicService.UpdateDicOfDic(dictionary);
                     doneCounter += 1;
                 }
-                else if (dic.Key == "Vehicles")
+                if (dic.Key.Contains("Vehicle"))
                 {
                     dicService = new VehicleServices();
                     dicService.UpdateDicOfDic(dictionary);
                     doneCounter += 1;
                 }
-                else if (dic.Key == "VehicleInformation")
+
+                if (dic.Key.Contains("VehicleInformation"))
                 {
                     dicService = new VehicleInformation();
                     dicService.UpdateDicOfDic(dictionary);
                     doneCounter += 1;
                 }
             }
-            Console.WriteLine(doneCounter + "Dictionarys added successfully and " + skippedCounter + " are skipped\n");
-
+            Console.WriteLine(doneCounter + " Dictionarys updated successfully and " + skippedCounter + "  are skipped\n");
+            return true;
         }
     }
 }

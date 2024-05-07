@@ -7,25 +7,27 @@ namespace Fleet_Manegment_System.Services.ServicesController
 {
     internal abstract class IRun
     {
-        public void Run(GVAR gvar)
+        public bool Run(GVAR gvar)
         {
             if (gvar.DicOfDic != null && !gvar.DicOfDic.IsEmpty)
             {
                 Console.WriteLine("Handling as DicOfDic");
-                HandleDicOfDic(gvar.DicOfDic);
+                return(HandleDicOfDic(gvar.DicOfDic));
             }
             else if (gvar.DicOfDT != null && !gvar.DicOfDT.IsEmpty)
             {
                 Console.WriteLine("Handling as DicOfDT");
-                HandleDicOfDT(gvar.DicOfDT);
+                return(HandleDicOfDT(gvar.DicOfDT));
             }
             else
             {
+                
                 Console.WriteLine("GVAR is empty or not properly initialized.");
+                return false;            
             }
         }
-        public abstract void HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT);
-        public abstract void HandleDicOfDic(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dicOfDic);
+        public abstract bool HandleDicOfDT(ConcurrentDictionary<string, DataTable> dicOfDT);
+        public abstract bool HandleDicOfDic(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dicOfDic);
 
 
 

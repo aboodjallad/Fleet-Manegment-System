@@ -55,11 +55,9 @@ namespace Fleet_Manegment_System.Services.Vehichles
             }
         }//done
 
-        public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
+        public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done 
         {
-            var sql = "INSERT INTO VehiclesInformations" +
-                            " (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) " +
-                            "VALUES (@vehicleId, @driverId, vehicleMake, vehicleModel, purchaseDate);";
+            var sql = "INSERT INTO VehiclesInformations (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) VALUES (@vehicleId, @driverId, vehicleMake, vehicleModel, purchaseDate);";
             var connection = GetConnection();
             try
             {
@@ -75,8 +73,10 @@ namespace Fleet_Manegment_System.Services.Vehichles
                 command.Parameters.AddWithValue("@vehicleId", vehicleid);
                 command.Parameters.AddWithValue("@driverId", driverid);
                 command.Parameters.AddWithValue("@vehicleMake", dictionary["vehiclemake"]);
+                Console.WriteLine(dictionary["vehiclemake"]);
                 command.Parameters.AddWithValue("@vehicleModel", dictionary["vehiclemodel"]);
-                command.Parameters.AddWithValue("@purchaseDate", purchasedate); ;
+                Console.WriteLine(dictionary["vehiclemodel"]);
+                command.Parameters.AddWithValue("@purchaseDate", purchasedate);
                 command.ExecuteNonQuery();
                 return true;
             }
@@ -166,7 +166,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         }
 
-        public void UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
+        public bool UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             var sql = "UPDATE VehiclesInformations" +
                 " SET driverid = @driverId, vehiclemake = @vehicleMake, vehiclemodel = @vehicleModel, purchasedate = @purchaseDate" +
@@ -189,10 +189,12 @@ namespace Fleet_Manegment_System.Services.Vehichles
                 command.Parameters.AddWithValue("@vehicleModel", dictionary["vehiclemodel"]);
                 command.Parameters.AddWithValue("@purchaseDate", purchasedate); ;
                 command.ExecuteNonQuery();
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+                return false;
             }
             finally
             {
@@ -320,7 +322,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
             
         }// done
 
-        public  ConcurrentDictionary<string, DataTable>? GetSpecificVehicleInformation(BigInteger vehicleId)
+        public  GVAR? GetSpecificVehicleInformation(BigInteger vehicleId)
         {
             string sql = @"
             SELECT
@@ -368,8 +370,8 @@ namespace Fleet_Manegment_System.Services.Vehichles
                     connection?.Close();
                 }
             }
-            var resultDictionary = new ConcurrentDictionary<string, DataTable>();
-            resultDictionary.TryAdd("VehicleInformation", resultTable);
+            GVAR resultDictionary = new();
+            resultDictionary.DicOfDT.TryAdd("VehicleInformation", resultTable);
             return resultDictionary;
         }// done
     }

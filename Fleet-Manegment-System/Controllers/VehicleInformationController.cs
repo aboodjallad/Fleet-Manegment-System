@@ -22,37 +22,53 @@ namespace Fleet_Manegment_System.Controllers
         [HttpPost("addVehicleInformation")]
         public IActionResult AddVehicleInformation([FromBody] GVAR gvar)
         {
-            if (gvar == null || !gvar.DicOfDic.ContainsKey("addVehicleInformation"))
+            if (gvar == null)
+            {
                 return BadRequest("Invalid or missing data for vehicle addition.");
+            }
 
-            _addVController.Run(gvar);
-            return Ok("Vehicle information added successfully.");
+            if (_addVController.Run(gvar))
+            {
+                return Ok("Vehicle information added successfully.");
+            }
+            return BadRequest($"Error adding VehicleInformation");
         }
 
         [HttpDelete("deleteVehicleInformation")]
         public IActionResult DeleteVehicleInformation([FromBody] GVAR gvar)
         {
-            if (gvar == null || !gvar.DicOfDic.ContainsKey("deleteVehicleInformation"))
+            if (gvar == null)
+            {
                 return BadRequest("Invalid or missing data for vehicle deletion.");
+            }
+            if (_deleteController.Run(gvar))
+            {
+                return Ok("Vehicle information deleted successfully.");
+            }
+            return BadRequest($"Error deleting VehicleInformation");
 
-            _deleteController.Run(gvar);
-            return Ok("Vehicle information deleted successfully.");
         }
 
         [HttpPut("updateVehicleInformation")]
         public IActionResult UpdateVehicleInformation([FromBody] GVAR gvar)
         {
-            if (gvar == null || !gvar.DicOfDic.ContainsKey("updateVehicleInformation"))
+            if (gvar == null)
+            {
                 return BadRequest("Invalid or missing data for vehicle update.");
+            }
 
-            _updateController.Run(gvar);
-            return Ok("Vehicle information updated successfully.");
+            if(_updateController.Run(gvar))
+            {
+                return Ok("Vehicle information updated successfully.");
+            }
+            return BadRequest($"Error updating VehicleInformation");
+
         }
 
         [HttpGet("getSpecificVehicleInformation")]
-        public ActionResult<ConcurrentDictionary<string, DataTable>> GetVehicleInformation([FromBody] GVAR gvar)
+        public ActionResult<GVAR> GetVehicleInformation([FromBody] GVAR gvar)
         {
-            if (gvar == null || !gvar.DicOfDic.ContainsKey("vehicleInformation"))
+            if (gvar == null)
             {
                 return BadRequest("Invalid or missing data for retrieving vehicle information.");
             }

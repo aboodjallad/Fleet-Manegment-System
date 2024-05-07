@@ -279,7 +279,7 @@ namespace Fleet_Manegment_System.Services.Driver
             }
         }//done
 
-        public void UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
+        public bool UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             var connection = DatabaseConnection.Instance.Connection;
             var sql = "UPDATE driver SET drivername = @drivername, phonenumber = @phonenumber WHERE driverid = @driverid";
@@ -299,10 +299,12 @@ namespace Fleet_Manegment_System.Services.Driver
                 command.Parameters.AddWithValue("@phonenumber", phonenumber);
                 command.Parameters.AddWithValue("@driverid", driverid);
                 command.ExecuteNonQuery();
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+                return false;
             }
             finally
             {
@@ -352,10 +354,7 @@ namespace Fleet_Manegment_System.Services.Driver
             }
 
         }
-        private string ConvertDataTableToJson(DataTable dt)
-        {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt, Newtonsoft.Json.Formatting.Indented);
-        }
+
 
     }
 }
