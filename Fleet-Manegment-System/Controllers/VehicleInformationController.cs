@@ -76,13 +76,8 @@ namespace Fleet_Manegment_System.Controllers
             _ = BigInteger.TryParse(gvar.DicOfDic["getVehicleInformation"]["vehicleid"].ToString(), out BigInteger vehicleID);
             
             var result = _getController.GetSpecificVehicleInformation(vehicleID);
+            return Ok(result);
 
-            if (gvar.DicOfDic.ContainsKey("getSpecificVehicleInformation"))
-            {
-                return Ok(result);
-            }
-
-            return NotFound("No vehicle information found.");
         }
 
         [HttpGet("getAllVehiclesInformation")]
@@ -91,7 +86,7 @@ namespace Fleet_Manegment_System.Controllers
         {
             
             var result = _getController.GetVehiclesInformation();
-            if (result != null && result.DicOfDT.Count > 0)
+            if (result != null)
             {
                 return Ok(result);
             }

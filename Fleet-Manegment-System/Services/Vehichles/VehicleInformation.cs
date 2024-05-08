@@ -57,7 +57,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done 
         {
-            var sql = "INSERT INTO VehiclesInformations (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) VALUES (@vehicleId, @driverId, vehicleMake, vehicleModel, purchaseDate);";
+            var sql = "INSERT INTO VehiclesInformations (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) VALUES (@vehicleId, @driverId, vehicleMake, vehicleModel, purchaseDate)";
             var connection = GetConnection();
             try
             {
@@ -73,9 +73,9 @@ namespace Fleet_Manegment_System.Services.Vehichles
                 command.Parameters.AddWithValue("@vehicleId", vehicleid);
                 command.Parameters.AddWithValue("@driverId", driverid);
                 command.Parameters.AddWithValue("@vehicleMake", dictionary["vehiclemake"]);
-                Console.WriteLine(dictionary["vehiclemake"]);
+                var make = dictionary["vehiclemake"];
                 command.Parameters.AddWithValue("@vehicleModel", dictionary["vehiclemodel"]);
-                Console.WriteLine(dictionary["vehiclemodel"]);
+                var model = dictionary["vehiclemodel"];
                 command.Parameters.AddWithValue("@purchaseDate", purchasedate);
                 command.ExecuteNonQuery();
                 return true;
@@ -168,9 +168,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public bool UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
-            var sql = "UPDATE VehiclesInformations" +
-                " SET driverid = @driverId, vehiclemake = @vehicleMake, vehiclemodel = @vehicleModel, purchasedate = @purchaseDate" +
-                " WHERE vehicleid = @vehicleId";
+            var sql = "UPDATE VehiclesInformations SET driverid = @driverId, vehiclemake = @vehicleMake, vehiclemodel = @vehicleModel, purchasedate = @purchaseDate WHERE vehicleid = @vehicleId";
             var connection = GetConnection();
             try
             {
@@ -286,7 +284,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public  GVAR? GetVehiclesInformation()
         {
-            var sql = "SELECT V.VehicleID, V.VehicleNumber,V.VehicleType, RH.VehicleDirection AS LastDirection, RH.Status AS LastStatus, RH.Address AS LastAddress, RH.Latitude || ',' || RH.Longitude AS LastPosition FROM Vehicles V JOIN RouteHistory RH ON V.VehicleID = RH.VehicleID  ORDER BY RH.RecordTime DESC";
+            var sql = "SELECT V.VehicleID, V.VehicleNumber,V.VehicleType, RH.VehicleDirection AS LastDirection, RH.Status AS LastStatus, RH.Address AS LastAddress, RH.Latitude || ',' || RH.Longitude AS LastPosition FROM Vehicles V JOIN RouteHistory RH ON V.VehicleID = RH.VehicleID  ORDER BY RH.RecordTime DESC;";
             DataTable dt = new();
             GVAR gvar = new();
             var connection = GetConnection();
@@ -298,11 +296,12 @@ namespace Fleet_Manegment_System.Services.Vehichles
                 }
 
                 using var command = new NpgsqlCommand(sql, connection);
+                command.ExecuteNonQuery();
                 using var adapter = new NpgsqlDataAdapter(command);
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
-                    gvar.DicOfDT.TryAdd("Vehicles", dt);
+                    gvar.DicOfDT.TryAdd("VehiclesInformation", dt);
                 }
                 return gvar;
             }
@@ -343,7 +342,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
             WHERE V.VehicleID = @VehicleID
             ORDER BY R.RecordTime DESC;";
 
-            var resultTable = new DataTable("VehicleInformation");
+            DataTable resultTable = new();
             using var connection = GetConnection();
             if (connection?.State != ConnectionState.Open)
             {
@@ -353,10 +352,9 @@ namespace Fleet_Manegment_System.Services.Vehichles
             {
                 using var command = new NpgsqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@VehicleID", vehicleId);
-                using (var adapter = new NpgsqlDataAdapter(command))
-                {
-                    adapter.Fill(resultTable);
-                }
+                command.ExecuteNonQuery();
+                using var adapter = new NpgsqlDataAdapter(command);
+                adapter.Fill(resultTable);
             }
             catch (Exception ex)
             {

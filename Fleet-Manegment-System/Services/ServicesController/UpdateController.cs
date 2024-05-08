@@ -75,7 +75,7 @@ namespace Fleet_Manegment_System.Services.ServicesController
                     doneCounter += 1;
                 }
 
-                if (dic.Key.Contains("VehicleInformation"))
+                if (dic.Key.Contains("gool"))
                 {
                     dicService = new VehicleInformation();
                     dicService.UpdateDicOfDic(dictionary);

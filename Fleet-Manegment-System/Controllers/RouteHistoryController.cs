@@ -1,4 +1,6 @@
-﻿using Fleet_Manegment_System.Services.Routes;
+﻿using Fleet_Manegment_System.Services.General;
+using Fleet_Manegment_System.Services.Routes;
+using Fleet_Manegment_System.Services.Vehicle;
 using FPro;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
@@ -32,27 +34,40 @@ namespace Fleet_Manegment_System.Controllers
         [HttpPost("addRouteHistory")]
         public IActionResult AddRouteHistory([FromBody] GVAR gvar)
         {
-            if (gvar == null || !gvar.DicOfDic.ContainsKey("addRouteHistory"))
+            if (gvar == null)
             {
                 return BadRequest("Invalid or missing GVAR data.");
             }
 
             try
             {
-                bool success = _routeHistoryService.AddRouteHistory(gvar.DicOfDic["addRouteHistory"]);
-                if (success)
+                foreach (var dic in gvar.DicOfDic)
                 {
-                    return Ok("Route history added successfully.");
+                    var dictionary = dic.Value;
+                    if (dictionary == null)
+                    {
+                        Console.WriteLine("Dictionary cant be empty \n Skipped");
+                        continue;
+                    }
+
+                    if (dic.Key.Contains("RouteHistory"))
+                    {
+                        bool success = _routeHistoryService.AddRouteHistory(dictionary);
+                        if (success)
+                        {
+                            return Ok("Route history added successfully.");
+                        }
+                    }
                 }
-                else
-                {
-                    return BadRequest("Failed to add route history.");
-                }
+                
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred while adding route history: {ex.Message}");
             }
+
+            return BadRequest("Failed to add route history.");
+
         }
     }
 }
