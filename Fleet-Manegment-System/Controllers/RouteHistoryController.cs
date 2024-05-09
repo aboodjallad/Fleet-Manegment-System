@@ -15,25 +15,27 @@ namespace Fleet_Manegment_System.Controllers
         private readonly RouteHistory _routeHistoryService = new();
 
         [HttpPost("getRouteHistory")]
-        public ActionResult<ConcurrentDictionary<string, DataTable>> GetRouteHistory([FromBody] GVAR gvar)
+        [Produces("application/json")]
+        public ActionResult<GVAR> GetRouteHistory([FromBody] GVAR gvar)
         {
-            if (gvar == null || !gvar.DicOfDic.ContainsKey("getRouteHistory"))
+            if (gvar == null)
             {
                 return BadRequest("Invalid or missing GVAR data.");
             }
 
-            var routeHistoryData = _routeHistoryService.GetRouteHistory(gvar.DicOfDic["getRouteHistory"]);
-            if (routeHistoryData == null || routeHistoryData.Count == 0)
+            var routeHistoryData = _routeHistoryService.GetRouteHistory(gvar);
+            if (routeHistoryData == null)
             {
                 return NotFound("No route history data found for the provided criteria.");
             }
 
             return Ok(routeHistoryData);
-        }
+        }// done
 
         [HttpPost("addRouteHistory")]
         public IActionResult AddRouteHistory([FromBody] GVAR gvar)
         {
+            bool flag = false;
             if (gvar == null)
             {
                 return BadRequest("Invalid or missing GVAR data.");
@@ -55,11 +57,15 @@ namespace Fleet_Manegment_System.Controllers
                         bool success = _routeHistoryService.AddRouteHistory(dictionary);
                         if (success)
                         {
-                            return Ok("Route history added successfully.");
+                            Console.WriteLine("Route with key : " + dic.Key + "added successfully.");
+                            flag = true;
                         }
                     }
                 }
-                
+                if (flag != false)
+                {
+                    return Ok("Route history added successfully.");
+                }
             }
             catch (Exception ex)
             {
@@ -68,6 +74,6 @@ namespace Fleet_Manegment_System.Controllers
 
             return BadRequest("Failed to add route history.");
 
-        }
+        }// done
     }
 }

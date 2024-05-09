@@ -1,4 +1,5 @@
 ﻿using Fleet_Manegment_System.Services.General;
+using FPro;
 using Npgsql;
 using System.Collections.Concurrent;
 using System.Data;
@@ -58,7 +59,7 @@ namespace Fleet_Manegment_System.Services.Routes
             }
         } // done
 
-        public ConcurrentDictionary<string, DataTable> GetRouteHistory(ConcurrentDictionary<string, string> dictinoary)
+        public GVAR GetRouteHistory(GVAR gvar)
         {
             string sql = @"
             SELECT
@@ -77,34 +78,51 @@ namespace Fleet_Manegment_System.Services.Routes
             AND CAST(RH.RecordTime AS BIGINT) <= @EndTime
             ORDER BY RH.RecordTime;";
 
-            var resultTable = new DataTable("RouteHistory");
+            DataTable resultTable = new();
+            GVAR resultDictionary = new();
             using (var connection = GetConnection())
             {
-                if (connection?.State != ConnectionState.Open)
+                try
                 {
-                    connection?.Open();
-                }
+                    if (connection?.State != ConnectionState.Open)
+                    {
+                        connection?.Open();
+                    }
+                    foreach (var dic in gvar.DicOfDic)
+                    {
+                        var dictinoary = dic.Value;
+                        if (dictinoary != null)
+                        {
+                            using var command = new NpgsqlCommand(sql, connection);
+                            _ = BigInteger.TryParse(dictinoary["vehicleid"].ToString(), out BigInteger vehicleid);
+                            _ = BigInteger.TryParse(dictinoary["starttime"].ToString(), out BigInteger starttime);
+                            _ = BigInteger.TryParse(dictinoary["endtime"].ToString(), out BigInteger endtime);
+                            command.Parameters.AddWithValue("@VehicleID", vehicleid);
+                            command.Parameters.AddWithValue("@StartTime", starttime);
+                            command.Parameters.AddWithValue("@EndTime", endtime);
+                            using var adapter = new NpgsqlDataAdapter(command);
+                            adapter.Fill(resultTable);
+                            resultDictionary.DicOfDT.TryAdd("RouteHistory", resultTable);
+                        }
+                    }
 
-                using (var command = new NpgsqlCommand(sql, connection))
-                {
-                    _ = BigInteger.TryParse(dictinoary["vehicleid"].ToString(), out BigInteger vehicleid);
-                    _ = BigInteger.TryParse(dictinoary["starttime"].ToString(), out BigInteger starttime);
-                    _ = BigInteger.TryParse(dictinoary["endtime"].ToString(), out BigInteger endtime);
-                    command.Parameters.AddWithValue("@VehicleID", vehicleid);
-                    command.Parameters.AddWithValue("@StartTime", starttime);
-                    command.Parameters.AddWithValue("@EndTime", endtime);
-                    using var adapter = new NpgsqlDataAdapter(command);
-                    adapter.Fill(resultTable);
+                    if (connection?.State != ConnectionState.Open)
+                    {
+                        connection?.Close();
+                    }
                 }
-
-                if (connection?.State != ConnectionState.Open)
+                catch (Exception ex)
                 {
-                    connection?.Close();
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+                }
+                finally
+                {
+                    if (connection?.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
                 }
             }
-
-            var resultDictionary = new ConcurrentDictionary<string, DataTable>();
-            resultDictionary.TryAdd("RouteHistory", resultTable);
             return resultDictionary;
         }// done
     }

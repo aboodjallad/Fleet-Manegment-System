@@ -57,7 +57,8 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done 
         {
-            var sql = "INSERT INTO VehiclesInformations (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) VALUES (@vehicleId, @driverId, vehicleMake, vehicleModel, purchaseDate)";
+
+            var sql = "INSERT INTO VehiclesInformations (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) VALUES (@vehicleId, @driverId, @vehicleMake, @vehicleModel, @purchaseDate)";
             var connection = GetConnection();
             try
             {
@@ -73,9 +74,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
                 command.Parameters.AddWithValue("@vehicleId", vehicleid);
                 command.Parameters.AddWithValue("@driverId", driverid);
                 command.Parameters.AddWithValue("@vehicleMake", dictionary["vehiclemake"]);
-                var make = dictionary["vehiclemake"];
                 command.Parameters.AddWithValue("@vehicleModel", dictionary["vehiclemodel"]);
-                var model = dictionary["vehiclemodel"];
                 command.Parameters.AddWithValue("@purchaseDate", purchasedate);
                 command.ExecuteNonQuery();
                 return true;
