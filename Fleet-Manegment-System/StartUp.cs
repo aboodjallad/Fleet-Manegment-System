@@ -3,14 +3,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Microsoft.AspNetCore.WebSockets;
+using Microsoft.AspNetCore.Http;
+using System.Net.WebSockets;
 
 
-    namespace Fleet_Manegment_System
+namespace Fleet_Manegment_System
+{
+    public class Startup
     {
-        public class Startup
+        public void ConfigureServices(IServiceCollection services)
         {
-            public void ConfigureServices(IServiceCollection services)
-            {
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -18,29 +21,61 @@ using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
                 {
                     args.ErrorContext.Handled = true;
                 };
-                // Additional settings as needed
             });
+            services.AddWebSockets(options =>
+            {
+                options.KeepAliveInterval = TimeSpan.FromSeconds(120); 
+            });
+
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
+            services.AddAuthorization();
 
 
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
             {
-                if (env.IsDevelopment())
-                {
-                    app.UseDeveloperExceptionPage();
-                }
-
-                app.UseRouting();
-
-                app.UseAuthorization();
-
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
+                app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseWebSockets();
+
+            app.Use(async (context, next) =>
+            {
+                if (context.WebSockets.IsWebSocketRequest)
+                {
+                    WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                    await WebSocketManager.HandleWebSocketCommunication(webSocket, context);
+                }
+                else
+                {
+                    await next.Invoke();
+                }
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
+            });
         }
     }
+}
 
 

@@ -1,14 +1,17 @@
 ﻿using Fleet_Manegment_System.Services.General;
 using FPro;
+using Newtonsoft.Json;
 using Npgsql;
 using System.Collections.Concurrent;
 using System.Data;
+using System.Net.WebSockets;
 using System.Numerics;
+using System.Text;
 
 
 namespace Fleet_Manegment_System.Services.Routes
 {
-    internal class RouteHistory
+    internal class RouteHistory 
     {
         protected static NpgsqlConnection? GetConnection()
         {
@@ -18,8 +21,8 @@ namespace Fleet_Manegment_System.Services.Routes
         public bool AddRouteHistory(ConcurrentDictionary<string, string> dictionary)
         {
             string sql = @"
-        INSERT INTO RouteHistory (vehicleid, vehicledirection, status, vehiclespeed, recordtime, address, latitude, longitude)
-        VALUES (@VehicleID, @VehicleDirection, @Status, @VehicleSpeed, @RecordTime, @Address, @Latitude, @Longitude);";
+            INSERT INTO RouteHistory (vehicleid, vehicledirection, status, vehiclespeed, recordtime, address, latitude, longitude)
+            VALUES (@VehicleID, @VehicleDirection, @Status, @VehicleSpeed, @RecordTime, @Address, @Latitude, @Longitude);";
             var connection = GetConnection();
             try
             {
@@ -29,10 +32,10 @@ namespace Fleet_Manegment_System.Services.Routes
                 }
 
                 using var command = new NpgsqlCommand(sql, connection);
-                _ = BigInteger.TryParse(dictionary["vehicleid"].ToString(), out BigInteger vehicleid);
-                _ = BigInteger.TryParse(dictionary["vehicledirection"].ToString(), out BigInteger vehicledirection);
-                _ = BigInteger.TryParse(dictionary["latitude"].ToString(), out BigInteger latitude);
-                _ = BigInteger.TryParse(dictionary["longitude"].ToString(), out BigInteger longitude);
+                _ = BigInteger.TryParse(dictionary["vehicleid"], out BigInteger vehicleid);
+                _ = BigInteger.TryParse(dictionary["vehicledirection"], out BigInteger vehicledirection);
+                _ = BigInteger.TryParse(dictionary["latitude"], out BigInteger latitude);
+                _ = BigInteger.TryParse(dictionary["longitude"], out BigInteger longitude);
 
                 command.Parameters.AddWithValue("@VehicleID", vehicleid);
                 command.Parameters.AddWithValue("@VehicleDirection", vehicledirection);
@@ -42,7 +45,15 @@ namespace Fleet_Manegment_System.Services.Routes
                 command.Parameters.AddWithValue("@Address", dictionary["address"]);
                 command.Parameters.AddWithValue("@Latitude", latitude);
                 command.Parameters.AddWithValue("@Longitude", longitude);
-                command.ExecuteNonQuery();
+                int affectedRows = command.ExecuteNonQuery();
+
+                if (affectedRows > 0)
+                {
+                    // Prepare the data to send
+                    string dataToSend = JsonConvert.SerializeObject(dictionary);
+                    var data = Encoding.UTF8.GetBytes(dataToSend);
+                    WebSocketManager.BroadcastMessage(data, WebSocketMessageType.Text).Wait(); 
+                }
                 return true;
             }
             catch (Exception ex)
@@ -57,8 +68,7 @@ namespace Fleet_Manegment_System.Services.Routes
                     connection.Close();
                 }
             }
-        } // done
-
+        }
         public GVAR GetRouteHistory(GVAR gvar)
         {
             string sql = @"
