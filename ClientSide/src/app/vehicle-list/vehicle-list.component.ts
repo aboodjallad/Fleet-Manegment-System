@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from '../vehicle.service';
-import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,8 +14,7 @@ export class VehicleListComponent implements OnInit {
 
 
   constructor(
-    private vehicleService: VehicleService,
-    private router:Router
+    private vehicleService: VehicleService
   ) { }
 
   ngOnInit(): void {
@@ -31,11 +29,6 @@ export class VehicleListComponent implements OnInit {
       this.detailedVehicleInfo = data.dicOfDic['Detailed VehicleInformation'];
       this.openDetailsModal(this.detailedVehicleInfo);
     });
-  }
-
-  openAddEntry(): void {
-    this.router.navigate(['/add-entry']);
-    console.log('Navigating to add entry');
   }
 
   openDetailsModal(data: any): void {

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { DriversApiResponse } from './get-entry/AllDriversApiResponse'; 
+
 import { SingleDriverApiResponse } from './SingleDriverApiResponce';
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,8 @@ export class DriverService {
   private deleteDriverUrl = 'http://localhost:5000/Driver/deleteDriver';
   private updateDriverUrl = 'http://localhost:5000/Driver/updateDriver';
   private getDriverUrl = 'http://localhost:5000/Driver/getDriver';
+  private getAllDriversUrl = 'http://localhost:5000/Drivers/getAllDrivers';
+
   constructor(private http: HttpClient) { }
 
 
@@ -62,8 +66,13 @@ export class DriverService {
     };
     return this.http.put(this.updateDriverUrl, requestBody);
   }
-  
+
+  getDriversData(): Observable<DriversApiResponse> {
+    return this.http.get<DriversApiResponse>(this.getAllDriversUrl);
+  }
 }
+
+
 interface ApiResponse {
   success: boolean;
   message: string;

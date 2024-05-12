@@ -1,7 +1,35 @@
-<h3>What do you want to Update?</h3>
+<div class="add-entry-container">
+<h3>What do you want to display?</h3>
   <select [(ngModel)]="selectedOption" (change)="onOptionChange()">
     <option value="">Select an option</option>
-    <option value="driver">Driver</option>
+    <option value="driver">Drivers</option>
     <option value="vehicle">Vehicle</option>
     <option value="vehicleInformation">Vehicle Information</option>
   </select>
+
+  <div *ngIf="selectedOption === 'driver'; then callFunction"></div>
+<ng-template #callFunction>
+  <div style="display:none">{{ getDrivers() }}</div>
+</ng-template>
+    <table>
+      <thead>
+        <tr>
+          <th>Driver ID</th>
+          <th>Driver Name</th>
+          <th>Phonenumber</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of Drivers">
+          <td>{{ driver.driverid }}</td>
+          <td>{{ driver.drivernumber }}</td>
+          <td>{{ driver.drivertype }}</td>
+          <td>{{ driver.lastdirection }}</td>
+          <td>{{ driver.laststatus }}</td>
+          <td>{{ driver.lastaddress }}</td>
+          <td>{{ driver.lastposition }}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  
