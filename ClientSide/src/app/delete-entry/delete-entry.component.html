@@ -1,0 +1,23 @@
+<router-outlet></router-outlet>
+<div class="add-entry-container">
+  <h3>What do you want to delete?</h3>
+  <select [(ngModel)]="selectedOption" (change)="onOptionChange()">
+    <option value="">Select an option</option>
+    <option value="driver">Driver</option>
+    <option value="vehicle">Vehicle</option>
+    <option value="vehicleInformation">Vehicle Information</option>
+  </select>
+
+  <div *ngIf="selectedOption === 'driver'">
+    <input type="text" placeholder="Driver ID" [(ngModel)]="driverId" name="driverId" required />
+    <button (click)="deleteDriver(driverId)">Delete Driver</button>
+  </div>
+  <div *ngIf="selectedOption === 'vehicle'">
+    <input type="text" placeholder="Vehicle ID" [(ngModel)]="vehicleId" name="vehicleId" required />
+    <button (click)="deleteVehicle(vehicleId)">Delete Vehicle</button>
+  </div>
+  <div *ngIf="selectedOption === 'vehicleInformation'">
+    <input type="text" placeholder="Vehicle Id" [(ngModel)]="vehicleId" name="vehicleId" required />
+    <button (click)="deleteVehicleInformation(vehicleId)">Delete Vehicle Information</button>
+  </div>
+</div>

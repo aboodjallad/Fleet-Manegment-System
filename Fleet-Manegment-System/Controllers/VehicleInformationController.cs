@@ -1,5 +1,6 @@
 ﻿using Fleet_Manegment_System.Services.ServicesController;
 using Fleet_Manegment_System.Services.Vehichles;
+using Fleet_Manegment_System.Services.Vehicle;
 using FPro;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
@@ -15,9 +16,8 @@ namespace Fleet_Manegment_System.Controllers
         private readonly IRun _addVController = new AddController();
         private readonly IRun _deleteController = new DeleteController();
         private readonly IRun _updateController = new UpdateController();
-        private readonly VehicleInformation _getController = new (); 
+        private readonly VehicleInformation _getController = new ();
 
-        
 
         [HttpPost("addVehicleInformation")]
         public IActionResult AddVehicleInformation([FromBody] GVAR gvar)
@@ -29,12 +29,12 @@ namespace Fleet_Manegment_System.Controllers
 
             if (_addVController.Run(gvar))
             {
-                return Ok("Vehicle information added successfully.");
+                return Ok(new {success = true, message = "VehicleInformation added successfully." });
             }
             return BadRequest($"Error adding VehicleInformation");
         }
 
-        [HttpDelete("deleteVehicleInformation")]
+        [HttpPost("deleteVehicleInformation")]
         public IActionResult DeleteVehicleInformation([FromBody] GVAR gvar)
         {
             if (gvar == null)
@@ -43,7 +43,7 @@ namespace Fleet_Manegment_System.Controllers
             }
             if (_deleteController.Run(gvar))
             {
-                return Ok("Vehicle information deleted successfully.");
+                return Ok(new { success = true, message = "VehicleInformation added successfully." });
             }
             return BadRequest($"Error deleting VehicleInformation");
 
@@ -59,13 +59,13 @@ namespace Fleet_Manegment_System.Controllers
 
             if(_updateController.Run(gvar))
             {
-                return Ok("Vehicle information updated successfully.");
+                return Ok(new { success = true, message = "VehicleInformation added successfully." });
             }
             return BadRequest($"Error updating VehicleInformation");
 
         }
 
-        [HttpGet("getSpecificVehicleInformation")]
+        [HttpPost("getSpecificVehicleInformation")]
         public ActionResult<GVAR> GetVehicleInformation([FromBody] GVAR gvar)
         {
             if (gvar == null)
@@ -91,6 +91,19 @@ namespace Fleet_Manegment_System.Controllers
                 return Ok(result);
             }
             return NotFound("No vehicle information available.");
+        }
+
+        [HttpPost("getVehicleInformation")]
+        [Produces("application/json")]
+        public ActionResult<GVAR> GetVehicle([FromBody] GVAR gvar)
+        {
+            var result = _getController.GetVehicleInformation(gvar);
+
+            if (result == null)
+            {
+                return NotFound("No vehicle found.");
+            }
+            return Ok(result);
         }
     }
 }

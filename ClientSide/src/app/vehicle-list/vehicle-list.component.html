@@ -1,0 +1,33 @@
+
+
+
+<div class="container">
+  
+  <table>
+    <thead>
+      <tr>
+        <th>VehicleID</th>
+        <th>VehicleNumber</th>
+        <th>VehicleType</th>
+        <th>LastDirection</th>
+        <th>LastStatus</th>
+        <th>LastAddress</th>
+        <th>LastPosition</th>
+        <th>Show more information</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let vehicle of vehicles">
+        <td>{{ vehicle.vehicleid }}</td>
+        <td>{{ vehicle.vehiclenumber }}</td>
+        <td>{{ vehicle.vehicletype }}</td>
+        <td>{{ vehicle.lastdirection }}</td>
+        <td>{{ vehicle.laststatus }}</td>
+        <td>{{ vehicle.lastaddress }}</td>
+        <td>{{ vehicle.lastposition }}</td>
+        <td><button (click)="showDetailedInfo(vehicle.vehicleid)">Show More</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

@@ -14,6 +14,13 @@ namespace Fleet_Manegment_System
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://localhost:4200") 
+                                       .AllowAnyMethod()
+                                       .AllowAnyHeader());
+            });
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -27,9 +34,9 @@ namespace Fleet_Manegment_System
                 options.KeepAliveInterval = TimeSpan.FromSeconds(120); 
             });
 
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-            services.AddAuthorization();
+            //services.AddRazorPages();
+           // services.AddServerSideBlazor();
+            //services.AddAuthorization();
 
 
         }
@@ -45,17 +52,17 @@ namespace Fleet_Manegment_System
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
+            app.UseCors("AllowSpecificOrigin");
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            //app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
-            app.UseWebSockets();
+            //app.UseWebSockets();
 
-            app.Use(async (context, next) =>
+           /* app.Use(async (context, next) =>
             {
                 if (context.WebSockets.IsWebSocketRequest)
                 {
@@ -66,13 +73,13 @@ namespace Fleet_Manegment_System
                 {
                     await next.Invoke();
                 }
-            });
+            });*/
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
+                //endpoints.MapBlazorHub();
+               // endpoints.MapFallbackToPage("/_Host");
             });
         }
     }

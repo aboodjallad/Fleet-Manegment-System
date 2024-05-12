@@ -25,7 +25,7 @@ namespace Fleet_Manegment_System.Controllers
             {
                 if (_addController.Run(gvar))
                 { 
-                return Ok("Driver added successfully.");
+                return Ok(new { success = true, message = "Driver added successfully."});
                 }
                 return BadRequest($"Error adding driver");
 
@@ -36,13 +36,13 @@ namespace Fleet_Manegment_System.Controllers
             }
         } // DONE
 
-        [HttpDelete("deleteDriver")]
+        [HttpPost("deleteDriver")]
         public IActionResult DeleteDriver([FromBody] GVAR gvar)
         {
             try
             {
                 _deleteController.Run(gvar);
-                return Ok();
+                return Ok(new { success = true, message = "Driver deleted successfully." });
             }
             catch (Exception ex)
             {
@@ -71,7 +71,7 @@ namespace Fleet_Manegment_System.Controllers
             {
                 if (_updateController.Run(gvar))
                 {
-                    return Ok("Driver updated successfully.");
+                    return Ok(new { success = true, message = "Driver added successfully." });
                 }
                 else
                     return BadRequest($"Error updating driver");
@@ -84,6 +84,19 @@ namespace Fleet_Manegment_System.Controllers
             }
 
         }
+
+        [HttpPost("getDriver")]
+        [Produces("application/json")]
+        public ActionResult<GVAR> GetDriver([FromBody] GVAR gvar)
+        {
+            var result = _driverService.GetDriver(gvar);
+
+            if (result == null)
+            {
+                return NotFound("No drivers found.");
+            }
+            return Ok(result);
+        }//done
 
     }
 }

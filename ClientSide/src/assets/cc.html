@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Details</title>
+  <style>
+    /* Add your CSS styles for the popup window here */
+  </style>
+</head>
+<body>
+  <div>
+    <h2>Detailed Vehicle Information</h2>
+    <p>Vehicle Number: <span id="vehiclenumber"></span></p>
+    <p>Vehicle Type: <span id="vehicletype"></span></p>
+    <!-- Add other detailed vehicle information here -->
+  </div>
+
+  <script>
+    // Parse the query parameter to extract the data object
+    const queryParams = new URLSearchParams(window.location.search);
+    const data = JSON.parse(decodeURIComponent(queryParams.get('data')));
+
+    // Display the detailed vehicle information in the popup window
+    document.getElementById('vehiclenumber').innerText = data.vehiclenumber;
+    document.getElementById('vehicletype').innerText = data.vehicletype;
+    // Update with other vehicle information as needed
+  </script>
+</body>
+</html>

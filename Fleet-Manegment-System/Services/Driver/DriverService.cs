@@ -355,7 +355,62 @@ namespace Fleet_Manegment_System.Services.Driver
 
         }
 
+        public GVAR? GetDriver(GVAR gvar)
+        {
+            var sql = "SELECT * FROM driver WHERE driverid = @driverid";
+            GVAR resultGvar = new();
+            var connection = DatabaseConnection.Instance.Connection;
+
+            try
+            {
+                if (connection?.State != ConnectionState.Open)
+                {
+                    connection?.Open();
+                }
+                var dictionary = gvar.DicOfDic["driver"];
+                _ = BigInteger.TryParse(dictionary["driverid"].ToString(), out BigInteger driverid);
+                DataTable dt = new();
+                var result = new ConcurrentDictionary<string, string>()
+                {
+                    ["drivername"] = "",
+                    ["phonenumber"] = ""
+                };
+
+                using (var command = new NpgsqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@driverid", driverid);
+                    command.ExecuteNonQuery();
+                    using (var adapter = new NpgsqlDataAdapter(command))
+                    {
+                        adapter.Fill(dt);
+                    }
+                    var drivername = dt.Rows[0]["drivername"].ToString();
+                    var phonenumber = dt.Rows[0]["phonenumber"].ToString();
+                    if (drivername != null && phonenumber != null)
+                    {
+                        result["drivername"] = drivername;
+                        result["phonenumber"] = phonenumber;
+                    }
+                }
+                resultGvar.DicOfDic.TryAdd("driver",result);
+                return resultGvar;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                if (connection?.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }//done
 
     }
+
+
 }
 

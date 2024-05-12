@@ -339,7 +339,8 @@ namespace Fleet_Manegment_System.Services.Vehichles
             JOIN Driver D ON VI.DriverId = D.DriverID
             LEFT JOIN RouteHistory R ON V.VehicleID = R.VehicleID
             WHERE V.VehicleID = @VehicleID
-            ORDER BY R.RecordTime DESC;";
+            ORDER BY R.RecordTime DESC
+            LIMIT 1;";
 
             DataTable resultTable = new();
             using var connection = GetConnection();
@@ -349,11 +350,39 @@ namespace Fleet_Manegment_System.Services.Vehichles
             }
             try
             {
+                var result = new ConcurrentDictionary<string, string>()
+                {
+                    ["vehiclenumber"] = "",
+                    ["vehicletype"] = "",
+                    ["drivername"] = "",
+                    ["phonenumber"] = "",
+                    ["lastposition"] = "",
+                    ["vehiclemake"] = "",
+                    ["vehiclemodel"] = "",
+                    ["lastGPStime"] = "",
+                    ["lastGPSspeed"] = "",
+                    ["lastaddress"] = ""
+                };
                 using var command = new NpgsqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@VehicleID", vehicleId);
                 command.ExecuteNonQuery();
                 using var adapter = new NpgsqlDataAdapter(command);
                 adapter.Fill(resultTable);
+                var test = resultTable.Rows[0].ToString();
+                result["vehiclenumber"] = resultTable.Rows[0]["vehiclenumber"].ToString();
+                result["vehicletype"] = resultTable.Rows[0]["vehicletype"].ToString();
+                result["drivername"] = resultTable.Rows[0]["drivername"].ToString();
+                result["phonenumber"] = resultTable.Rows[0]["phonenumber"].ToString();
+                result["lastposition"] = resultTable.Rows[0]["lastposition"].ToString();
+                result["vehiclemake"] = resultTable.Rows[0]["vehiclemake"].ToString();
+                result["vehiclemodel"] = resultTable.Rows[0]["vehiclemodel"].ToString();
+                result["lastGPStime"] = resultTable.Rows[0]["lastGPStime"].ToString();
+                result["lastGPSspeed"] = resultTable.Rows[0]["lastGPSspeed"].ToString();
+                result["lastaddress"] = resultTable.Rows[0]["lastaddress"].ToString();
+
+                GVAR resultDictionary = new();
+                resultDictionary.DicOfDic.TryAdd("Detailed VehicleInformation", result);
+                return resultDictionary;
             }
             catch (Exception ex)
             {
@@ -367,9 +396,66 @@ namespace Fleet_Manegment_System.Services.Vehichles
                     connection?.Close();
                 }
             }
-            GVAR resultDictionary = new();
-            resultDictionary.DicOfDT.TryAdd("VehicleInformation", resultTable);
-            return resultDictionary;
+            
         }// done
+
+
+        public GVAR? GetVehicleInformation(GVAR gvar)//done
+        {
+            var sql = "SELECT * FROM vehiclesinformations WHERE vehicleid = @vehicleId";
+            var connection = GetConnection();
+            GVAR resultGvar = new();
+            var result = new ConcurrentDictionary<string, string>()
+            {
+                ["driverid"] = "",
+                ["vehiclemake"] = "",
+                ["vehiclemodel"] = "",
+                ["purchasedate"] = ""
+            };
+
+            try
+            {
+                if (connection?.State != ConnectionState.Open)
+                {
+                    connection?.Open();
+                }
+
+                var dictionary = gvar.DicOfDic["vehicleinformation"];
+                _ = BigInteger.TryParse(dictionary["vehicleid"].ToString(), out BigInteger vehicleid);
+                using var command = new NpgsqlCommand(sql, connection);
+                DataTable dt = new();
+                command.Parameters.AddWithValue("@vehicleId", vehicleid);
+                command.ExecuteNonQuery();
+                using (var adapter = new NpgsqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+                var driverid = dt.Rows[0]["driverid"].ToString();
+                var vehiclemake = dt.Rows[0]["vehiclemake"].ToString();
+                var vehiclemodel = dt.Rows[0]["vehiclemodel"].ToString();
+                var purchasedate = dt.Rows[0]["purchasedate"].ToString();
+                if (driverid != null && vehiclemake != null && vehiclemodel != null && purchasedate != null)
+                {
+                    result["driverid"] = driverid;
+                    result["vehiclemake"] = vehiclemake;
+                    result["vehiclemodel"] = vehiclemodel;
+                    result["purchasedate"] = purchasedate;
+                }
+                resultGvar.DicOfDic.TryAdd("vehicleinformation", result);
+                return resultGvar;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                if (connection?.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }

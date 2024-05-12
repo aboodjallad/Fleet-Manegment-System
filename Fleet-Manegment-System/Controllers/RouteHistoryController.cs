@@ -64,7 +64,7 @@ namespace Fleet_Manegment_System.Controllers
                 }
                 if (flag != false)
                 {
-                    return Ok("Route history added successfully.");
+                    return Ok(new { success = true, message = "Vehicle added successfully." });
                 }
             }
             catch (Exception ex)

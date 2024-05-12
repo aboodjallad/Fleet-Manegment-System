@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Details</title>
+  <style>
+   /* vehicle-display.component.css */
+
+/* Container styles */
+.container {
+  display: flex;
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  height: 100vh; /* Set container height to viewport height */
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header and cell styles */
+th, td {
+  padding: 12px;
+  text-align: center; /* Align content in the middle */
+}
+
+/* Alternating row colors */
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover effect on rows */
+tr:hover {
+  background-color: #f2f2f2;
+}
+
+/* Button styles */
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive table */
+@media screen and (max-width: 600px) {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    border: none;
+    padding: 8px;
+    display: block;
+    text-align: center; /* Align content in the middle */
+  }
+
+  th {
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+  }
+}
+.detailed-info-container {
+  margin-top: 20px; /* Adjust margin top as needed */
+}
+h2 {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      padding: 10px;
+      border-radius: 8px;
+      margin: 20px auto;
+      width: 90%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+  </style>
+</head>
+<body>
+  <div>
+    <h2>Detailed Vehicle Information</h2>
+    <table>
+      <tr>
+        <th>Field</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>Vehicle Model</td>
+        <td id="vehiclemodel"></td>
+      </tr>
+      <tr>
+        <td>Vehicle Number</td>
+        <td id="vehiclenumber"></td>
+      </tr>
+      <tr>
+        <td>Last Position</td>
+        <td id="lastposition"></td>
+      </tr>
+      <tr>
+        <td>Last GPS Speed</td>
+        <td id="lastGPSspeed"></td>
+      </tr>
+      <tr>
+        <td>Last Address</td>
+        <td id="lastaddress"></td>
+      </tr>
+      <tr>
+        <td>Last GPS Time</td>
+        <td id="lastGPStime"></td>
+      </tr>
+      <tr>
+        <td>Vehicle Type</td>
+        <td id="vehicletype"></td>
+      </tr>
+      <tr>
+        <td>Vehicle Make</td>
+        <td id="vehiclemake"></td>
+      </tr>
+      <tr>
+        <td>Phone Number</td>
+        <td id="phonenumber"></td>
+      </tr>
+      <tr>
+        <td>Driver Name</td>
+        <td id="drivername"></td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    // Parse the query parameter to extract the data object
+    const queryParams = new URLSearchParams(window.location.search);
+    const data = JSON.parse(decodeURIComponent(queryParams.get('data')));
+
+    // Display the detailed vehicle information in the table
+    document.getElementById('vehiclemodel').innerText = data.vehiclemodel;
+    document.getElementById('vehiclenumber').innerText = data.vehiclenumber;
+    document.getElementById('lastposition').innerText = data.lastposition;
+    document.getElementById('lastGPSspeed').innerText = data.lastGPSspeed;
+    document.getElementById('lastaddress').innerText = data.lastaddress;
+    document.getElementById('lastGPStime').innerText = new Date(parseInt(data.lastGPStime)).toLocaleString();
+    document.getElementById('vehicletype').innerText = data.vehicletype;
+    document.getElementById('vehiclemake').innerText = data.vehiclemake;
+    document.getElementById('phonenumber').innerText = data.phonenumber;
+    document.getElementById('drivername').innerText = data.drivername;
+  </script>
+</body>
+</html>

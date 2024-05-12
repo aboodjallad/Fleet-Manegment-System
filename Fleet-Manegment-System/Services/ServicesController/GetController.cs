@@ -43,7 +43,7 @@ namespace Fleet_Manegment_System.Services.ServicesController
                         Console.WriteLine($"An error occurred: {ex.Message}");
                     }
                 }
-                else if (dic.Key.Contains("Vehicles"))
+                else if (dic.Key.Contains("Vehicle"))
                 {
                     var key = dic.Key;
                     dicService = new VehicleServices();

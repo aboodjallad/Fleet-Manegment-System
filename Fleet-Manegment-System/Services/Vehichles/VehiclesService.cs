@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Data;
 using Npgsql;
 using System.Numerics;
+using FPro;
 
 namespace Fleet_Manegment_System.Services.Vehicle
 {
@@ -297,7 +298,57 @@ namespace Fleet_Manegment_System.Services.Vehicle
             }
         }//done
 
-        
+
+        public GVAR? GetVehicle(GVAR gvar)//done
+        {
+            var sql = "SELECT * FROM vehicles WHERE vehicleid = @vehicleId";
+            var connection = GetConnection();
+            GVAR resultGvar = new();
+            var result = new ConcurrentDictionary<string, string>()
+            {
+                ["vehiclenumber"] = "",
+                ["vehicletype"] = ""
+            };
+
+            try
+            {
+                if (connection?.State != ConnectionState.Open)
+                {
+                    connection?.Open();
+                }
+                var dictionary = gvar.DicOfDic["vehicle"];
+                _ = BigInteger.TryParse(dictionary["vehicleid"].ToString(), out BigInteger vehicleid);
+                using var command = new NpgsqlCommand(sql, connection);
+                DataTable dt = new();
+                command.Parameters.AddWithValue("@vehicleId", vehicleid);
+                command.ExecuteNonQuery();
+                using (var adapter = new NpgsqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+                var vehiclenumber = dt.Rows[0]["vehiclenumber"].ToString();
+                var vehicletype = dt.Rows[0]["vehicletype"].ToString();
+                if (vehiclenumber != null && vehicletype != null)
+                {
+                    result["vehiclenumber"] = vehiclenumber;
+                    result["vehicletype"] = vehicletype;
+                }
+                resultGvar.DicOfDic.TryAdd("vehicle", result);
+                return resultGvar;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                if (connection?.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }
 
