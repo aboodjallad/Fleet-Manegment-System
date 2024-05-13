@@ -15,5 +15,4 @@ Click the image below to play the demo video:
 
 
 ```bash
-# Example installation command
-git clone https://yourrepository.git
+
