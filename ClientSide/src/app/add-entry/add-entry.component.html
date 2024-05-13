@@ -5,6 +5,7 @@
     <option value="">Select an option</option>
     <option value="driver">Driver</option>
     <option value="vehicle">Vehicle</option>
+    <option value="assign-driver-to-vehicle">Assign driver to vehicle</option>
     <option value="vehicleInformation">Vehicle Information</option>
     <option value="routeHistory">Route History</option>
   </select>
@@ -14,6 +15,20 @@
     <input type="text" placeholder="Phone Number" [(ngModel)]="phoneNumber" name="phoneNumber" required />
     <button (click)="addDriver(driverName, phoneNumber)">Add Driver</button>
   </div>
+
+  <div *ngIf="selectedOption === 'assign-driver-to-vehicle'">
+    <select [(ngModel)]="selectedID" (change)="onOptionChange()">
+      <option value="">Select Driver ID</option> 
+      <option *ngFor="let driver of Drivers" [value]="driver.driverid">{{ driver.driverid }}</option>
+    </select>
+
+    <select [(ngModel)]="selectedVehicle" (change)="onOptionChange()">
+      <option value="">Select Vehicle ID</option> 
+      <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
+    </select>
+    <button (click)="assignDriver(selectedID,selectedVehicle)">Assign or Update Driver</button>
+  </div>
+  
   <div *ngIf="selectedOption === 'vehicle'">
     <input type="text" placeholder="Vehicle Number" [(ngModel)]="vehicleNumber" name="vehicleNumber" required />
     <input type="text" placeholder="Vehicle Type" [(ngModel)]="vehicleType" name="vehicleType" required />
@@ -28,7 +43,11 @@
     <button (click)="addVehicleInformation(vehicleId, driverId,vehicleMake,vehicleModel,purchaseDate)">Add Vehicle Information</button>
   </div>
   <div *ngIf="selectedOption === 'routeHistory'">
-    <input type="text" placeholder="Vehicle Id" [(ngModel)]="vehicleId" name="vehicleId" required />
+    <select [(ngModel)]="selectedID" (change)="onOptionChange()">
+      <option value="">Select Vehicle ID</option> 
+      <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
+    </select>    
+
     <input type="text" placeholder="Vehicle Direction" [(ngModel)]="vehicleDirection" name="vehicleDirection" required />
     <input type="text" placeholder="Status" [(ngModel)]="status" name="status" required />
     <input type="text" placeholder="Vehicle Speed" [(ngModel)]="vehicleSpeed" name="vehicleSpeed" required />
@@ -36,6 +55,6 @@
     <input type="text" placeholder="Address" [(ngModel)]="address" name="address" required />
     <input type="text" placeholder="Latitude" [(ngModel)]="latitude" name="latitude" required />
     <input type="text" placeholder="Longitude" [(ngModel)]="longitude" name="longitude" required />
-    <button (click)="addRouteHistory(vehicleId,vehicleDirection,status,vehicleSpeed,recordTime,address,latitude,longitude)">Add Route History</button>
+    <button (click)="addRouteHistory(selectedID,vehicleDirection,status,vehicleSpeed,recordTime,address,latitude,longitude)">Add Route History</button>
   </div>
 </div>
