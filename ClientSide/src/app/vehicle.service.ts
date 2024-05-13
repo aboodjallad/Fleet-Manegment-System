@@ -5,7 +5,8 @@ import { VehicleApiResponse } from './vehicle-list//VehicleApiResponse ';
 import { DetailedVehicleApiResponse } from './vehicle-list/DetailedVehicleApiResponse';
 import { SingleVehicleApiResponse } from './SingleVehicleApiResponse';
 import { SingleVehicleInformationApiResponse } from './SingleVehicleInformationApiRespnse';
-
+import { VehiclesApiResponse } from './get-entry/AllVehiclesApiResponce';
+import { VehiclesInformationsApiResponse } from './get-entry/AllVehiclesInformationsResponse';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,12 +20,18 @@ export class VehicleService {
   private getVehicleInformationUrl = 'http://localhost:5000/VehicleInformation/getVehicleInformation';
   private updateVehicleUrl = 'http://localhost:5000/Vehicles/updateVehicle';
   private updateVehicleInformationUrl = 'http://localhost:5000/VehicleInformation/updateVehicleInformation';
+  private getAllVehiclesUrl = 'http://localhost:5000/Vehicles/getAllVehicles';
   private getVehicleUrl = 'http://localhost:5000/Vehicles/getVehicle';
+  private getAllVehiclesInformationsUrl ='http://localhost:5000/VehicleInformation/getAll';
   constructor(private http: HttpClient) { }
 
 
   getVehicleData(): Observable<VehicleApiResponse > {
     return this.http.get<VehicleApiResponse>(this.getAllUrl);
+  }
+
+  getVehiclesInformations(): Observable<VehiclesInformationsApiResponse > {
+    return this.http.get<VehiclesInformationsApiResponse>(this.getAllVehiclesInformationsUrl);
   }
 
   getDetailedVehicleInformation(vehicleId: string): Observable<DetailedVehicleApiResponse> {
@@ -126,6 +133,10 @@ export class VehicleService {
       }
     };
     return this.http.put(this.updateVehicleUrl, requestBody);
+  }
+
+  getVehiclesData(): Observable<VehiclesApiResponse> {
+    return this.http.get<VehiclesApiResponse>(this.getAllVehiclesUrl);
   }
 
   updateVehicleInformation(driverId:string,VehicleId: string, vehicleMake: string,vehicleModel: string, purchaseDate: string){

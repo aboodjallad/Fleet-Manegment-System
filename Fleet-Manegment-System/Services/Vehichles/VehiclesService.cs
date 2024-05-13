@@ -349,6 +349,46 @@ namespace Fleet_Manegment_System.Services.Vehicle
                 }
             }
         }
+
+        public GVAR? GetVehicles()//done
+        {
+            var gvar = new GVAR();
+            var sql = "SELECT * FROM vehicles";
+            DataTable dt = new();
+            var connection = DatabaseConnection.Instance.Connection;
+
+            if (connection?.State != ConnectionState.Open)
+            {
+                connection?.Open();
+            }
+
+            try
+            {
+                using var command = new NpgsqlCommand(sql, connection);
+                command.ExecuteNonQuery();
+                using var adapter = new NpgsqlDataAdapter(command);
+                adapter.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    gvar.DicOfDT.TryAdd("Vehicles", dt);
+                }
+                return gvar;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                if (connection?.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+        }
     }
 }
 

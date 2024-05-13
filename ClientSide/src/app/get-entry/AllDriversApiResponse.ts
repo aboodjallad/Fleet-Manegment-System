@@ -1,11 +1,10 @@
-export interface DriversApiResponse  {
-    dicOfDic: any; 
-    dicOfDT: {
-      drivers: {
-        driverid: string;
-        drivername: string;
-        phonenumber: string;
-      }[];
-    };
-  }
-  
+export interface DriversApiResponse {
+  dicOfDic: any;
+  dicOfDT: {
+    Drivers: { 
+      driverid: string;
+      drivername: string;
+      phonenumber: string;
+    }[];
+  };
+}

@@ -13,7 +13,8 @@ export class DriverService {
   private deleteDriverUrl = 'http://localhost:5000/Driver/deleteDriver';
   private updateDriverUrl = 'http://localhost:5000/Driver/updateDriver';
   private getDriverUrl = 'http://localhost:5000/Driver/getDriver';
-  private getAllDriversUrl = 'http://localhost:5000/Drivers/getAllDrivers';
+  private getAllDriversUrl = 'http://localhost:5000/Driver/getAllDrivers';
+  private assignDriverUrl = 'http://localhost:5000/VehicleInformation/assignDriver';
 
   constructor(private http: HttpClient) { }
 
@@ -70,6 +71,20 @@ export class DriverService {
   getDriversData(): Observable<DriversApiResponse> {
     return this.http.get<DriversApiResponse>(this.getAllDriversUrl);
   }
+
+  assignDriver(driverId: string,vehicleId: string){
+
+    const requestBody = {
+      dicOfDic: {
+        assignDriver: {
+          driverid:driverId,
+          vehicleid: vehicleId
+        }
+      }
+    };
+    return this.http.put(this.assignDriverUrl, requestBody);
+  }
+
 }
 
 

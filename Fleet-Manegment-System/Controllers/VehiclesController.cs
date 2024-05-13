@@ -65,9 +65,22 @@ namespace Fleet_Manegment_System.Controllers
 
         [HttpPost("getVehicle")]
         [Produces("application/json")]
-        public ActionResult<GVAR> GetAllDrivers([FromBody] GVAR gvar)
+        public ActionResult<GVAR> GetVehicle([FromBody] GVAR gvar)
         {
             var result = vehicleServices.GetVehicle(gvar);
+
+            if (result == null)
+            {
+                return NotFound("No vehicle found.");
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("getAllVehicles")]
+        [Produces("application/json")]
+        public ActionResult<GVAR> GetAllVehicles()
+        {
+            var result = vehicleServices.GetVehicles();
 
             if (result == null)
             {

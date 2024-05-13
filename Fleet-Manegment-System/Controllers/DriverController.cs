@@ -56,7 +56,7 @@ namespace Fleet_Manegment_System.Controllers
         {
             var result = _driverService.GetDrivers();
 
-            if (result == null || result.DicOfDT.Count == 0)
+            if (result == null)
             {
                 return NotFound("No drivers found.");
             }

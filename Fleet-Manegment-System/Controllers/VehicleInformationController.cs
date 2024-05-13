@@ -65,6 +65,18 @@ namespace Fleet_Manegment_System.Controllers
 
         }
 
+        [HttpPut("assignDriver")]
+
+        public IActionResult assignDriver([FromBody] GVAR gvar)
+        {
+            if (gvar != null)
+            {
+                return Ok(_getController.AssignOrUpdateVehicleDriver(gvar));
+            }
+
+            return BadRequest($"Error updating VehicleInformation");
+        }
+
         [HttpPost("getSpecificVehicleInformation")]
         public ActionResult<GVAR> GetVehicleInformation([FromBody] GVAR gvar)
         {
@@ -105,5 +117,20 @@ namespace Fleet_Manegment_System.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("getAll")]
+        [Produces("application/json")]
+        public ActionResult<GVAR> GetAll()
+        {
+            var result = _getController.GetAll();
+
+            if (result == null)
+            {
+                return NotFound("No vehicle found.");
+            }
+            return Ok(result);
+        }
+
+
     }
 }

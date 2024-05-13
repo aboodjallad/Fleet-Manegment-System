@@ -242,7 +242,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
             }
         }//done
 
-        public void AssignOrUpdateVehicleDriver(ConcurrentDictionary<string, ConcurrentDictionary<string, string>> dictionarys)
+        public bool AssignOrUpdateVehicleDriver(GVAR gvar)
         {
             var connection = GetConnection();
             string sql = @"
@@ -255,7 +255,8 @@ namespace Fleet_Manegment_System.Services.Vehichles
                 {
                     connection?.Open();
                 }
-                foreach (var dic in dictionarys)
+
+                foreach (var dic in gvar.DicOfDic)
                 {
                     var dictionary = dic.Value;
                     _ = BigInteger.TryParse(dictionary["driverid"].ToString(), out BigInteger driverid);
@@ -266,6 +267,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
                     command.Parameters.AddWithValue("@DriverId", driverid);
 
                     int result = command.ExecuteNonQuery();
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -279,6 +281,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
                     connection.Close();
                 }
             }
+            return false;
         }// done
 
         public  GVAR? GetVehiclesInformation()
@@ -399,7 +402,6 @@ namespace Fleet_Manegment_System.Services.Vehichles
             
         }// done
 
-
         public GVAR? GetVehicleInformation(GVAR gvar)//done
         {
             var sql = "SELECT * FROM vehiclesinformations WHERE vehicleid = @vehicleId";
@@ -457,5 +459,50 @@ namespace Fleet_Manegment_System.Services.Vehichles
                 }
             }
         }
+
+        public GVAR? GetAll()//done
+        {
+            var gvar = new GVAR();
+            var sql = "SELECT * FROM vehiclesinformations";
+            DataTable dt = new();
+            var connection = DatabaseConnection.Instance.Connection;
+
+            if (connection?.State != ConnectionState.Open)
+            {
+                connection?.Open();
+            }
+
+            try
+            {
+                using var command = new NpgsqlCommand(sql, connection);
+                command.ExecuteNonQuery();
+                using var adapter = new NpgsqlDataAdapter(command);
+                adapter.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    gvar.DicOfDT.TryAdd("VehiclesInformations", dt);
+                }
+                return gvar;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                if (connection?.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+        }
+
+
+
+
+
     }
 }
