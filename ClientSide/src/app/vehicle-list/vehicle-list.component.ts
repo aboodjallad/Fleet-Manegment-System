@@ -18,10 +18,20 @@ export class VehicleListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.fetchVehicleData();
+
+    this.vehicleService.hubConnection.on('ReceiveRouteHistoryUpdate', () => {
+      this.fetchVehicleData();
+    });
+  }
+
+  fetchVehicleData(): void {
     this.vehicleService.getVehicleData().subscribe((data) => {
       this.vehicles = data.dicOfDT.VehiclesInformation;
     });
   }
+
+  // onmassege
 
   showDetailedInfo(vehicleId: string) {
     this.selectedVehicleId = vehicleId;

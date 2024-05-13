@@ -1,8 +1,8 @@
-
 <div class="container">
   <table>
     <thead>
       <tr>
+        <th>#</th>
         <th>VehicleID</th>
         <th>VehicleNumber</th>
         <th>VehicleType</th>
@@ -14,7 +14,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let vehicle of vehicles">
+      <tr *ngFor="let vehicle of vehicles; let i = index">
+        <td>{{ i + 1 }}</td>
         <td>{{ vehicle.vehicleid }}</td>
         <td>{{ vehicle.vehiclenumber }}</td>
         <td>{{ vehicle.vehicletype }}</td>

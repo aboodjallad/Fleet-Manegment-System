@@ -1,5 +1,6 @@
 ﻿using Fleet_Manegment_System.Services.General;
 using FPro;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Npgsql;
 using System.Collections.Concurrent;
@@ -11,8 +12,13 @@ using System.Text;
 
 namespace Fleet_Manegment_System.Services.Routes
 {
-    internal class RouteHistory 
+    internal class RouteHistory : IRouteHistoryService
     {
+        private readonly IHubContext<VehicleHub> _hubContext;
+        public RouteHistory(IHubContext<VehicleHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
         protected static NpgsqlConnection? GetConnection()
         {
             return DatabaseConnection.Instance.Connection;
@@ -44,15 +50,8 @@ namespace Fleet_Manegment_System.Services.Routes
                 command.Parameters.AddWithValue("@Address", dictionary["address"]);
                 command.Parameters.AddWithValue("@Latitude", latitude);
                 command.Parameters.AddWithValue("@Longitude", longitude);
-                int affectedRows = command.ExecuteNonQuery();
-
-                if (affectedRows > 0)
-                {
-                    // Prepare the data to send
-                    string dataToSend = JsonConvert.SerializeObject(dictionary);
-                    var data = Encoding.UTF8.GetBytes(dataToSend);
-                    WebSocketManager.BroadcastMessage(data, WebSocketMessageType.Text).Wait(); 
-                }
+                command.ExecuteNonQuery();
+                _hubContext.Clients.All.SendAsync("ReceiveRouteHistoryUpdate", dictionary);
                 return true;
             }
             catch (Exception ex)

@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.AspNetCore.WebSockets;
-using Microsoft.AspNetCore.Http;
-using System.Net.WebSockets;
+using Fleet_Manegment_System.Services.Routes;
 
 
 namespace Fleet_Manegment_System
@@ -19,8 +17,10 @@ namespace Fleet_Manegment_System
                 options.AddPolicy("AllowSpecificOrigin",
                     builder => builder.WithOrigins("http://localhost:4200") 
                                        .AllowAnyMethod()
-                                       .AllowAnyHeader());
+                                       .AllowAnyHeader()
+                                       .AllowCredentials());
             });
+            services.AddSignalR();
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -34,15 +34,16 @@ namespace Fleet_Manegment_System
                 options.KeepAliveInterval = TimeSpan.FromSeconds(120); 
             });
 
-            //services.AddRazorPages();
-           // services.AddServerSideBlazor();
-            //services.AddAuthorization();
+            services.AddScoped<IRouteHistoryService, RouteHistory>();
+
 
 
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,26 +55,13 @@ namespace Fleet_Manegment_System
             }
             app.UseCors("AllowSpecificOrigin");
             app.UseHttpsRedirection();
-            //app.UseStaticFiles();
 
             app.UseRouting();
 
-            //app.UseAuthorization();
-
-            //app.UseWebSockets();
-
-           /* app.Use(async (context, next) =>
+            app.UseEndpoints(endpoints =>
             {
-                if (context.WebSockets.IsWebSocketRequest)
-                {
-                    WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                    await WebSocketManager.HandleWebSocketCommunication(webSocket, context);
-                }
-                else
-                {
-                    await next.Invoke();
-                }
-            });*/
+                endpoints.MapHub<VehicleHub>("/vehicleHub");
+            });
 
             app.UseEndpoints(endpoints =>
             {

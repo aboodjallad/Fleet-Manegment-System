@@ -12,7 +12,12 @@ namespace Fleet_Manegment_System.Controllers
     [Route("[controller]")]
     public class RouteHistoryController : ControllerBase
     {
-        private readonly RouteHistory _routeHistoryService = new();
+        private readonly IRouteHistoryService _routeHistoryService;
+
+        public RouteHistoryController(IRouteHistoryService routeHistoryService)
+        {
+            _routeHistoryService = routeHistoryService;
+        }
 
         [HttpPost("getRouteHistory")]
         [Produces("application/json")]

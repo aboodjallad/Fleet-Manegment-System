@@ -103,6 +103,7 @@ export class AddEntryComponent {
 
   addRouteHistory(vehicleId :string,vehicleDirection:string,status:string,vehicleSpeed:string,recordTime:string,address:string,latitude:string,longitude:string): void{
     this.routeService.addNewRouteHistory(this.selectedID,vehicleDirection,status,vehicleSpeed,recordTime,address,latitude,longitude).subscribe({
+      
       next: (response) => {
         this.selectedOption='';
         this.selectedID = '';
@@ -126,6 +127,8 @@ export class AddEntryComponent {
     this.driverService.assignDriver(driverId, vehicleID).subscribe({
       next: (response) => {
         this.selectedOption='';
+        this.selectedID ='';
+        this.selectedVehicle = '';
         this.driverName = '';
         this.phoneNumber= '';
         console.log('vehicle added successfully:', response);
