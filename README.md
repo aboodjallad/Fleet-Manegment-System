@@ -1,14 +1,9 @@
-# Project Name
+# Fleet Manegment System
 
 ## Introduction
 
-Provide a brief description of what the project does and who it's for.
 
 ## Features
-
-- Feature 1
-- Feature 2
-- Feature 3
 
 ## Demo Video
 
@@ -18,7 +13,6 @@ Click the image below to play the demo video:
 
 ## Installation
 
-Provide step-by-step instructions on how to install the project.
 
 ```bash
 # Example installation command
