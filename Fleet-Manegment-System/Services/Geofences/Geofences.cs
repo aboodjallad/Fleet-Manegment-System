@@ -1,4 +1,5 @@
 ﻿using Fleet_Manegment_System.Services.General;
+using FPro;
 using Npgsql;
 using System.Collections.Concurrent;
 using System.Data;
@@ -12,7 +13,7 @@ namespace Fleet_Manegment_System.Services.Geofences
             return DatabaseConnection.Instance.Connection;
         }
 
-        public ConcurrentDictionary<string, DataTable>? GetAllGeofences()
+        public GVAR? GetAllGeofences()
         {
             string sql = "SELECT * FROM geofences";
             var connection = GetConnection();
@@ -30,8 +31,8 @@ namespace Fleet_Manegment_System.Services.Geofences
                     adapter.Fill(resultTable);
                 }
 
-                var resultDictionary = new ConcurrentDictionary<string, DataTable>();
-                resultDictionary.TryAdd("Geofences", resultTable);
+                GVAR resultDictionary = new ();
+                resultDictionary.DicOfDT.TryAdd("Geofences", resultTable);
                 return resultDictionary;
             }
             catch (Exception ex)

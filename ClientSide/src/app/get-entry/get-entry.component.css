@@ -1,13 +1,18 @@
 /* General styling for the container */
 .add-entry-container {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-sizing: border-box;
+
+}
   
   /* Styling for headers within the container */
   .add-entry-container h3 {
@@ -44,6 +49,7 @@
     border-radius: 4px;
     transition: background-color 0.3s ease;
   }
+
   
   /* Hover effect for buttons */
   .add-entry-container button:hover {

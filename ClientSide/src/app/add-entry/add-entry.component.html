@@ -26,9 +26,8 @@
       <option value="">Select Vehicle ID</option> 
       <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
     </select>
-    <button (click)="assignDriver(selectedID,selectedVehicle)">Assign or Update Driver</button>
+    <button (click)="assignDriver(selectedID,selectedVehicle)">Assign or Update</button>
   </div>
-  
   <div *ngIf="selectedOption === 'vehicle'">
     <input type="text" placeholder="Vehicle Number" [(ngModel)]="vehicleNumber" name="vehicleNumber" required />
     <input type="text" placeholder="Vehicle Type" [(ngModel)]="vehicleType" name="vehicleType" required />

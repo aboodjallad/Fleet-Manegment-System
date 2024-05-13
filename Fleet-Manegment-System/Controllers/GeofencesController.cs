@@ -17,10 +17,11 @@ namespace Fleet_Manegment_System.Controllers
         
 
         [HttpGet("getAllGeofences")]
+        [Produces("application/json")]
         public ActionResult<ConcurrentDictionary<string, DataTable>> GetGeofences()
         {
             var geofences = _geofencesService.GetAllGeofences();
-            if (geofences == null || geofences.Count == 0)
+            if (geofences == null)
             {
                 return NotFound("No geofences found.");
             }

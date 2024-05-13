@@ -6,6 +6,7 @@
     <option value="vehicles">Vehicles</option>
     <option value="vehicleInformation">Vehicles Informations</option>
     <option value="routeHistory">Rote History</option>
+    <option value="geofences">Geofences</option>
   </select>
 
   <div *ngIf="selectedOption === 'drivers'">
@@ -71,6 +72,36 @@
           </tbody>
         </table>
         </div>
+
+        <div *ngIf="selectedOption === 'geofences'" >
+          <button (click)="getAllGeofences()">Get Geofences</button>
+          <table>
+            <thead>
+              <tr>
+                <th>Geofence ID</th>
+                <th>Geofence Type</th>
+                <th>Added Date</th>
+                <th>Stroke Color</th>
+                <th>Stroke Opacity</th>
+                <th>Stroke Weight</th>
+                <th>Fill Color</th>
+                <th>Fill Opacity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let geofence of Geofences">
+                <td>{{ geofence.geofenceid }}</td>
+                <td>{{ geofence.geofencetype }}</td>
+                <td>{{ geofence.addeddate }}</td>
+                <td>{{ geofence.strokecolor }}</td>
+                <td>{{ geofence.strokeopacity }}</td>
+                <td>{{ geofence.strokeweight }}</td>
+                <td>{{ geofence.fillcolor }}</td>
+                <td>{{ geofence.fillopacity }}</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
 
         <div *ngIf="selectedOption === 'routeHistory'" >
           <select [(ngModel)]="selectedVehicle" (change)="onOptionChange()">

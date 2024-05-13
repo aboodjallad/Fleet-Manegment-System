@@ -5,6 +5,8 @@ import { VehiclesApiResponse } from './AllVehiclesApiResponce';
 import { VehicleService } from 'app/vehicle.service';
 import { RouteService } from 'app/route.service';
 import { SingleRouteApiResponse } from './SingleRouteApiResponse';
+import { GeofencesService } from 'app/geofences.service';
+import { GeofencesApiResponse } from './AllGeofencesApiResponse';
 
 @Component({
   selector: 'app-get-entry',
@@ -16,6 +18,7 @@ export class GetEntryComponent {
   Routes : any[] = [];
   Drivers : any[] = [];
   Vehicles : any[] = [];
+  Geofences : any[] = [];
   selectedOption: string = '';
   VehiclesInformations : any[] = [];
   selectedVehicle = '';
@@ -26,7 +29,8 @@ export class GetEntryComponent {
   constructor(
   private driverService :DriverService,
   private vehicleService :VehicleService,
-  private routeService : RouteService
+  private routeService : RouteService,
+  private geofencesService :GeofencesService
   ){}
   
 
@@ -42,6 +46,7 @@ export class GetEntryComponent {
       this.VehiclesInformations = [];
       this.Vehicles = [];
       this.Routes = [];
+      this.Geofences =[];
     }, error => {
       console.error("Error fetching drivers:", error);
     });
@@ -53,7 +58,7 @@ export class GetEntryComponent {
       this.VehiclesInformations = [];
       this.Drivers = [];
       this.Routes = [];
-
+      this.Geofences =[];
     }, error => {
       console.error("Error fetching vehicles:", error);
     });
@@ -64,6 +69,7 @@ export class GetEntryComponent {
       this.VehiclesInformations = data.dicOfDT.VehiclesInformations;
       this.Drivers = [];
       this.Routes = [];
+      this.Geofences =[];
   },error => {
     console.error("Error fetching VehiclesInformations:", error);
   });
@@ -74,6 +80,7 @@ getRoutes(vehicleId:string , startTime : string , endTime: string): void {
     this.Routes = data.dicOfDT.RouteHistory;
     this.VehiclesInformations = [];
     this.Drivers = [];
+    this.Geofences =[];
     this.selectedVehicle = '';
     this.startTime = '';
     this.endTime ='';
@@ -81,6 +88,17 @@ getRoutes(vehicleId:string , startTime : string , endTime: string): void {
     console.error("Error fetching routs:", error);
   });
   
+}
+
+getAllGeofences():void{
+  this.geofencesService.getGofencesData().subscribe((data: GeofencesApiResponse) => {
+    this.Geofences = data.dicOfDT.Geofences;
+    this.Drivers = [];
+    this.Routes = [];
+  }, error => {
+    console.error("Error fetching geofences:", error);
+  });
+
 }
 
 

@@ -11,6 +11,9 @@ import { VehiclesInformationsApiResponse } from './get-entry/AllVehiclesInformat
   providedIn: 'root'
 })
 export class VehicleService {
+
+  constructor(private http: HttpClient) { }
+
   private getAllUrl = 'http://localhost:5000/VehicleInformation/getAllVehiclesInformation';
   private showMoreUrl = 'http://localhost:5000/VehicleInformation/getSpecificVehicleInformation';
   private addVehicleUrl = 'http://localhost:5000/Vehicles/addVehicle';
@@ -23,7 +26,6 @@ export class VehicleService {
   private getAllVehiclesUrl = 'http://localhost:5000/Vehicles/getAllVehicles';
   private getVehicleUrl = 'http://localhost:5000/Vehicles/getVehicle';
   private getAllVehiclesInformationsUrl ='http://localhost:5000/VehicleInformation/getAll';
-  constructor(private http: HttpClient) { }
 
 
   getVehicleData(): Observable<VehicleApiResponse > {

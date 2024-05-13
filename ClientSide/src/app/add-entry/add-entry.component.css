@@ -1,5 +1,9 @@
 /* General styling for the container */
 .add-entry-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     max-width: 600px;
     margin: 2rem auto;
     padding: 2rem;
@@ -7,6 +11,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     box-sizing: border-box;
+
   }
   
   /* Styling for headers within the container */
@@ -49,4 +54,12 @@
   .add-entry-container button:hover {
     background-color: #0056b3;
   }
+
+  .centered-container {
+    display: flex;            /* Enables flexbox layout */
+    justify-content: center;  /* Horizontally centers the content */
+    align-items: center;      /* Vertically centers the content */
+    height: 100vh;            /* Optional: Change as per your container's height requirement */
+    text-align: center;       /* Ensures text is also centered, useful for inline elements */
+}
   
