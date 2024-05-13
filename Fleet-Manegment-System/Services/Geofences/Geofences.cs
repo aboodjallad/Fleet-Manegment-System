@@ -15,7 +15,7 @@ namespace Fleet_Manegment_System.Services.Geofences
 
         public GVAR? GetAllGeofences()
         {
-            string sql = "SELECT * FROM geofences";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetAllGeofences);
             var connection = GetConnection();
 
             try

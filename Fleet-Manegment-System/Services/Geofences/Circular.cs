@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Fleet_Manegment_System.Services.General;
+using Npgsql;
 using System.Collections.Concurrent;
 using System.Data;
 
@@ -8,9 +9,7 @@ namespace Fleet_Manegment_System.Services.Geofences
     {
         public ConcurrentDictionary<string, DataTable>? GetAllCircularGeofences()
         {
-            string sql = @"
-        SELECT GeofenceID, Radius, Latitude, Longitude
-        FROM CircleGeofence;";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetAllCircularGeofences);
             var connection = GetConnection();
 
             try

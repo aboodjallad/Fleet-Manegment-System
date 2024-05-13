@@ -16,7 +16,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public void AddDicOfDT(DataTable table)
         {
-            var sql = "INSERT INTO vehicles (vehiclenumber, vehicletype) VALUES (@vehicleNumber, @vehicleType)";
+            var sql =  SqlManager.GetSqlCommand(SqlManager.SqlCommands.InsertVehicle);
             var connection = GetConnection();
             try
             {
@@ -49,7 +49,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
         {
-            var sql = "INSERT INTO vehicles (vehiclenumber, vehicletype) VALUES (@vehicleNumber, @vehicleType);";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.InsertVehicle);
             var connection = GetConnection();
             try
             {
@@ -81,7 +81,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public bool DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
         {
-            var sql = "DELETE FROM vehicles WHERE vehicleid = @vehicleId;";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.DeleteVehicle);
             var connection = GetConnection();
             try
             {
@@ -112,7 +112,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public void DeleteDicOfDT(DataTable table)
         {
-            var sql = "DELETE FROM vehicles WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.DeleteVehicle);
             var connection = GetConnection();
             try
             {
@@ -142,7 +142,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public DataTable? GetDicOfDT(DataTable table, string key)//done
         {
-            var sql = "SELECT * FROM vehicles WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetVehicle);
             DataTable resultTable = new(key);
             var connection = GetConnection();
             try
@@ -183,7 +183,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
         {
-            var sql = "SELECT * FROM driver WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetVehicle);
             var connection = GetConnection();
             var result = new ConcurrentDictionary<string, string>()
             {
@@ -231,7 +231,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public bool UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
-            var sql = "UPDATE vehicles SET vehiclenumber = @vehicleNumber, vehicletype = @vehicleType WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.UpdateVehicle);
             var connection = GetConnection();
             try
             {
@@ -265,7 +265,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public void UpdateDicOfDT(DataTable table)
         {
-            var sql = "UPDATE vehicles SET vehiclenumber = @vehicleNumber, vehicletype = @vehicleType WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.UpdateVehicle);
             var connection = GetConnection();
             try
             {
@@ -301,7 +301,7 @@ namespace Fleet_Manegment_System.Services.Vehicle
 
         public GVAR? GetVehicle(GVAR gvar)//done
         {
-            var sql = "SELECT * FROM vehicles WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetVehicle);
             var connection = GetConnection();
             GVAR resultGvar = new();
             var result = new ConcurrentDictionary<string, string>()

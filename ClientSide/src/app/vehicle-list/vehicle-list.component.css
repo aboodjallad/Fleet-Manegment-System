@@ -5,8 +5,11 @@
   display: flex;
   justify-content: center; /* Horizontally center the content */
   align-items: center; /* Vertically center the content */
-  height: 100vh; /* Set container height to viewport height */
-  background-color: #f0f0f2; /* Soft background color */
+  background-color: #f0f0f2;
+  width: 100%; /* adjust width as necessary */
+  overflow-y: auto; /* Enables vertical scrolling */
+  border-radius: 4px; /* optional, for styling */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft background color */
 }
 
 /* Table styles */
@@ -24,6 +27,7 @@ table {
 th, td {
   padding: 15px; /* Increased padding for better readability */
   text-align: center; /* Align content in the middle */
+  border-bottom: 1px solid #ddd;
   font-family: 'Arial', sans-serif; /* Modern font */
 }
 

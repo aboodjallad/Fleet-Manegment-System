@@ -14,7 +14,7 @@ namespace Fleet_Manegment_System.Services.Driver
         public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
         {
             var connection = DatabaseConnection.Instance.Connection;
-            var sql = "INSERT INTO driver (drivername, phonenumber) VALUES (@drivername, @phonenumber)";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.insertDriver);
             try
             {
                 if (connection?.State != ConnectionState.Open)
@@ -45,7 +45,7 @@ namespace Fleet_Manegment_System.Services.Driver
 
         public void AddDicOfDT(DataTable table) //done
         {
-            var sql = "INSERT INTO driver (drivername, phonenumber) VALUES (@drivername, @phonenumber)";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.insertDriver);
             var connection = DatabaseConnection.Instance.Connection;
             try
             {
@@ -80,8 +80,7 @@ namespace Fleet_Manegment_System.Services.Driver
 
         public bool DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
-            var sql2 = "DELETE FROM driver WHERE driverid = @driverid";
-            var sql1 = "UPDATE VehiclesInformations SET driverid = 9999 WHERE driverid = @driverid";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.DeleteDriver);
             var connection = DatabaseConnection.Instance.Connection;
             _ = BigInteger.TryParse(dictionary["driverid"].ToString(), out BigInteger driverid);
             try
@@ -90,12 +89,9 @@ namespace Fleet_Manegment_System.Services.Driver
                 {
                     connection?.Open();
                 }
-                using var command1 = new NpgsqlCommand(sql1, connection);
-                using var command2 = new NpgsqlCommand(sql2, connection);
-                command1.Parameters.AddWithValue("@driverid", driverid);
-                command2.Parameters.AddWithValue("@driverid", driverid);
-                command1.ExecuteNonQuery();
-                command2.ExecuteNonQuery();
+                using var command = new NpgsqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@driverid", driverid);
+                command.ExecuteNonQuery();
                 Console.WriteLine("driver with ID: " + driverid + " deleted successfully");
                 return true;
             }
@@ -116,6 +112,8 @@ namespace Fleet_Manegment_System.Services.Driver
         public void DeleteDicOfDT(DataTable table)
         {
             var connection = DatabaseConnection.Instance.Connection;
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.DeleteDriver);
+
 
             try
             {
@@ -127,7 +125,7 @@ namespace Fleet_Manegment_System.Services.Driver
                 foreach (DataRow row in table.Rows)
                 {
                     _ = BigInteger.TryParse(row["driverid"].ToString(), out BigInteger driverid);
-                    using var command = new NpgsqlCommand("DELETE FROM driver WHERE driverid = @driverid", connection);
+                    using var command = new NpgsqlCommand(sql);
                     command.Parameters.AddWithValue("@driverid", driverid);
                     command.ExecuteNonQuery();
                 }
@@ -147,7 +145,7 @@ namespace Fleet_Manegment_System.Services.Driver
 
         public DataTable? GetDicOfDT(DataTable table, string key)//done
         {
-            var sql = "SELECT * FROM driver WHERE driverid = @driverid";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetDriver);
             var connection = DatabaseConnection.Instance.Connection;
 
             if(connection?.State != ConnectionState.Open)
@@ -192,7 +190,7 @@ namespace Fleet_Manegment_System.Services.Driver
 
         public ConcurrentDictionary<string, string>? GetDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
-            var sql = "SELECT * FROM driver WHERE driverid = @driverid";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetDriver);
             var connection = DatabaseConnection.Instance.Connection;
 
             try
@@ -244,7 +242,7 @@ namespace Fleet_Manegment_System.Services.Driver
         public void UpdateDicOfDT(DataTable table)
         {
             var connection = DatabaseConnection.Instance.Connection;
-            var sql = "UPDATE driver SET drivername = @drivername, phonenumber = @phonenumber WHERE driverid = @driverid";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.UpdateDriver);
             try
             {
                 if (connection?.State != ConnectionState.Open)
@@ -282,7 +280,7 @@ namespace Fleet_Manegment_System.Services.Driver
         public bool UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
             var connection = DatabaseConnection.Instance.Connection;
-            var sql = "UPDATE driver SET drivername = @drivername, phonenumber = @phonenumber WHERE driverid = @driverid";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.UpdateDriver);
             try
             {
                 if (connection?.State != ConnectionState.Open)
@@ -318,7 +316,7 @@ namespace Fleet_Manegment_System.Services.Driver
         public GVAR? GetDrivers()//done
         {
             var gvar = new GVAR();
-            var sql = "SELECT * FROM driver";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetAllDrivers);
             DataTable dt = new();
             var connection = DatabaseConnection.Instance.Connection;
 
@@ -357,7 +355,7 @@ namespace Fleet_Manegment_System.Services.Driver
 
         public GVAR? GetDriver(GVAR gvar)
         {
-            var sql = "SELECT * FROM driver WHERE driverid = @driverid";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetDriver);
             GVAR resultGvar = new();
             var connection = DatabaseConnection.Instance.Connection;
 

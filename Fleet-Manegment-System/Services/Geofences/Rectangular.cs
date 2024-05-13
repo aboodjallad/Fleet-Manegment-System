@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Fleet_Manegment_System.Services.General;
+using Npgsql;
 using System;
 using System.Collections.Concurrent;
 using System.Data;
@@ -9,9 +10,8 @@ namespace Fleet_Manegment_System.Services.Geofences
     {
         public ConcurrentDictionary<string,DataTable>? GetAllRectangularGeofences()
         {
-            string sql = @"
-        SELECT GeofenceID, North, East, West, South
-        FROM RectangleGeofence;";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetAllRectangularGeofences);
+
             var connection = GetConnection();
 
             try

@@ -20,9 +20,8 @@ namespace Fleet_Manegment_System.Services.Routes
 
         public bool AddRouteHistory(ConcurrentDictionary<string, string> dictionary)
         {
-            string sql = @"
-            INSERT INTO RouteHistory (vehicleid, vehicledirection, status, vehiclespeed, recordtime, address, latitude, longitude)
-            VALUES (@VehicleID, @VehicleDirection, @Status, @VehicleSpeed, @RecordTime, @Address, @Latitude, @Longitude);";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.AddRouteHistory);
+
             var connection = GetConnection();
             try
             {
@@ -71,22 +70,8 @@ namespace Fleet_Manegment_System.Services.Routes
         }
         public GVAR GetRouteHistory(GVAR gvar)
         {
-            string sql = @"
-            SELECT
-                V.VehicleID,
-                V.VehicleNumber,
-                RH.Address,
-                RH.Status,
-                RH.Latitude || ',' || RH.Longitude AS Position,
-                RH.VehicleDirection,
-                RH.VehicleSpeed AS GPSSpeed,
-                RH.RecordTime AS GPSTime
-            FROM Vehicles V
-            JOIN RouteHistory RH ON V.VehicleID = RH.VehicleID
-            WHERE V.VehicleID = @VehicleID
-            AND CAST(RH.RecordTime AS BIGINT) >= @StartTime
-            AND CAST(RH.RecordTime AS BIGINT) <= @EndTime
-            ORDER BY RH.RecordTime;";
+            var sql = SqlManager.GetSqlCommand(SqlManager.SqlCommands.GetRouteHistory);
+
 
             DataTable resultTable = new();
             GVAR resultDictionary = new();

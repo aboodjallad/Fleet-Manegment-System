@@ -4,6 +4,7 @@ using System.Data;
 using Npgsql;
 using System.Numerics;
 using FPro;
+using static Fleet_Manegment_System.Services.General.SqlManager;
 
 
 namespace Fleet_Manegment_System.Services.Vehichles
@@ -17,9 +18,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
         
         public void AddDicOfDT(DataTable table)
         {
-            var sql = @"INSERT INTO VehiclesInformations 
-                 (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate)  
-                VALUES (@vehicleId, @driverId, vehicleMake, vehicleModel, purchaseDate);";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.InsertVehicleInformation);
             var connection = GetConnection();
             try
             {
@@ -58,7 +57,8 @@ namespace Fleet_Manegment_System.Services.Vehichles
         public bool AddDicOfDic(ConcurrentDictionary<string, string> dictionary)//done 
         {
 
-            var sql = "INSERT INTO VehiclesInformations (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) VALUES (@vehicleId, @driverId, @vehicleMake, @vehicleModel, @purchaseDate)";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.InsertVehicleInformation);
+
             var connection = GetConnection();
             try
             {
@@ -95,7 +95,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public bool DeleteDicOfDic(ConcurrentDictionary<string, string> dictionary)//done
         {
-            var sql = "DELETE FROM VehiclesInformations WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.DeleteVehicleInformation);
             var connection = GetConnection();
             try
             {
@@ -126,7 +126,8 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public void DeleteDicOfDT(DataTable table)
         {
-            var sql = "DELETE FROM VehiclesInformations WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.DeleteVehicleInformation);
+
             var connection = GetConnection();
             try
             {
@@ -167,7 +168,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public bool UpdateDicOfDic(ConcurrentDictionary<string, string> dictionary)
         {
-            var sql = "UPDATE VehiclesInformations SET driverid = @driverId, vehiclemake = @vehicleMake, vehiclemodel = @vehicleModel, purchasedate = @purchaseDate WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.UpdateVehicleInformation);
             var connection = GetConnection();
             try
             {
@@ -204,9 +205,8 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public void UpdateDicOfDT(DataTable table)
         {
-            var sql = "UPDATE VehiclesInformations" +
-                            " SET driverid = @driverId, vehiclemake = @vehicleMake, vehiclemodel = @vehicleModel, purchasedate = @purchaseDate" +
-                            " WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.UpdateVehicleInformation);
+
             var connection = GetConnection();
             try
             {
@@ -245,10 +245,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
         public bool AssignOrUpdateVehicleDriver(GVAR gvar)
         {
             var connection = GetConnection();
-            string sql = @"
-            UPDATE VehiclesInformations
-            SET driverid = @DriverId
-            WHERE vehicleid = @VehicleID;";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.AssignDriver);
             try
             {
                 if (connection?.State != ConnectionState.Open)
@@ -286,7 +283,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public  GVAR? GetVehiclesInformation()
         {
-            var sql = "SELECT V.VehicleID, V.VehicleNumber,V.VehicleType, RH.VehicleDirection AS LastDirection, RH.Status AS LastStatus, RH.Address AS LastAddress, RH.Latitude || ',' || RH.Longitude AS LastPosition FROM Vehicles V JOIN RouteHistory RH ON V.VehicleID = RH.VehicleID  ORDER BY RH.RecordTime DESC;";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.GetVehiclesInformation);
             DataTable dt = new();
             GVAR gvar = new();
             var connection = GetConnection();
@@ -325,26 +322,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public  GVAR? GetSpecificVehicleInformation(BigInteger vehicleId)
         {
-            string sql = @"
-            SELECT
-                V.VehicleNumber,
-                V.VehicleType,
-                D.DriverName,
-                D.PhoneNumber,
-                R.Latitude || ',' || R.Longitude AS LastPosition,
-                VI.VehicleMake,
-                VI.VehicleModel,
-                R.RecordTime AS LastGPSTime,
-                R.VehicleSpeed AS LastGPSSpeed,
-                R.Address AS LastAddress
-            FROM Vehicles V
-            JOIN VehiclesInformations VI ON V.VehicleID = VI.VehicleID
-            JOIN Driver D ON VI.DriverId = D.DriverID
-            LEFT JOIN RouteHistory R ON V.VehicleID = R.VehicleID
-            WHERE V.VehicleID = @VehicleID
-            ORDER BY R.RecordTime DESC
-            LIMIT 1;";
-
+            var sql = SqlManager.GetSqlCommand(SqlCommands.GetSpecificVehicleInformation);
             DataTable resultTable = new();
             using var connection = GetConnection();
             if (connection?.State != ConnectionState.Open)
@@ -404,7 +382,7 @@ namespace Fleet_Manegment_System.Services.Vehichles
 
         public GVAR? GetVehicleInformation(GVAR gvar)//done
         {
-            var sql = "SELECT * FROM vehiclesinformations WHERE vehicleid = @vehicleId";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.GetVehicleInformation);
             var connection = GetConnection();
             GVAR resultGvar = new();
             var result = new ConcurrentDictionary<string, string>()
@@ -463,7 +441,8 @@ namespace Fleet_Manegment_System.Services.Vehichles
         public GVAR? GetAll()//done
         {
             var gvar = new GVAR();
-            var sql = "SELECT * FROM vehiclesinformations";
+            var sql = SqlManager.GetSqlCommand(SqlCommands.GetAll);
+
             DataTable dt = new();
             var connection = DatabaseConnection.Instance.Connection;
 

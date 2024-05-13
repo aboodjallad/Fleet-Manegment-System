@@ -34,12 +34,18 @@
     <button (click)="addVehicle(vehicleNumber, vehicleType)">Add Vehicle</button>
   </div>
   <div *ngIf="selectedOption === 'vehicleInformation'">
-    <input type="text" placeholder="Vehicle Id" [(ngModel)]="vehicleId" name="vehicleId" required />
-    <input type="text" placeholder="Driver Id" [(ngModel)]="driverId" name="driverId" required />
+      <select [(ngModel)]="selectedVehicle" (change)="onOptionChange()">
+        <option value="">Select Vehicle ID</option> 
+        <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
+      </select>   
+      <select [(ngModel)]="selectedID" (change)="onOptionChange()">
+        <option value="">Select Driver ID</option> 
+        <option *ngFor="let driver of Drivers" [value]="driver.driverid">{{ driver.driverid }}</option>
+      </select>  
     <input type="text" placeholder="Vehicle Make" [(ngModel)]="vehicleMake" name="vehicleMake" required />
     <input type="text" placeholder="Vehicle model" [(ngModel)]="vehicleModel" name="vehicleModel" required />
     <input type="text" placeholder="Purchasedate" [(ngModel)]="purchaseDate" name="purchaseDate" required />
-    <button (click)="addVehicleInformation(vehicleId, driverId,vehicleMake,vehicleModel,purchaseDate)">Add Vehicle Information</button>
+    <button (click)="addVehicleInformation(selectedVehicle, selectedID,vehicleMake,vehicleModel,purchaseDate)">Add Vehicle Information</button>
   </div>
   <div *ngIf="selectedOption === 'routeHistory'">
     <select [(ngModel)]="selectedID" (change)="onOptionChange()">

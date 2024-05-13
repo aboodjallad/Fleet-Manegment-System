@@ -84,10 +84,11 @@ export class AddEntryComponent {
   }
 
   addVehicleInformation(vehicleId:string,driverId:string,vehicleMake:string,vehicleModel:string ,purchaseDate:string): void{
-    this.vehicleService.addNewVehicleInformation(vehicleId,driverId,vehicleMake,vehicleModel,purchaseDate).subscribe({
+    this.vehicleService.addNewVehicleInformation(this.selectedVehicle,driverId,vehicleMake,vehicleModel,purchaseDate).subscribe({
       next: (response) => {
         this.selectedOption='';
-        this.vehicleId = '';
+        this.selectedVehicle = '';
+        this.selectedID = '';
         this.driverId = '';
         this.vehicleMake = '';
         this.vehicleModel = '';
