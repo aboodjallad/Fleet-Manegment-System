@@ -1,9 +1,10 @@
 # Fleet Manegment System
 
-## Introduction
+## Requirements
 
-
-## Features
+* .net 8.0 or later 
+* leatest ANGULAR version 
+* FPro reference in all projects in the soulution 
 
 ## Demo Video
 
@@ -23,5 +24,16 @@ _connectionString = "Host=localhost; Port=5432; Database=DatabaseName; Username=
 * Run The server (Make sure to run this project):
 
 ![image](https://github.com/aboodjallad/Fleet-Manegment-System/assets/67801795/89336937-6f04-4827-946a-6fed49b85013)
+
+* then Open the termenal and make sure your on **\Fleet-Manegment-System\clientside**
+
+* Run the ANGULAR server using this command :
+```bash 
+ng serve
+``` 
+
+* Open this URL in your browser : http://localhost:4200  OR http://localhost:4200/home
+
+
 
 
