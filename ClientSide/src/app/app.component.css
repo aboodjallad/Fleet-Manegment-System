@@ -1,0 +1,42 @@
+.navbar {
+    background-color: #007BFF; /* Blue gradient base */
+    overflow: hidden; /* Prevents content from spilling outside */
+    display: flex;
+    justify-content: center; /* Center navbar contents */
+    padding: 12px 0; /* Padding around the navbar */
+  }
+  
+  .navbar a {
+    float: left; /* Ensuring the links align properly */
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s; /* Smooth transition for hover */
+  }
+  
+  /* Hover effect for navbar links */
+  .navbar a:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Styling the active link (if needed, can be dynamically assigned) */
+  .navbar a.active {
+    background-color: #004D99;
+  }
+  
+  .navbar button {
+    background-color: transparent; /* Match navbar background */
+    border: none;
+    color: white; /* Match link color */
+    padding: 14px 20px; /* Consistent with link padding */
+    text-decoration: none; /* Removes underline */
+    font-size: 16px; /* Matches link font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    outline: none; /* Removes outline */
+  }
+  
+  .navbar button:hover {
+    background-color: #0056b3; /* Darker blue on hover, similar to links */
+  }

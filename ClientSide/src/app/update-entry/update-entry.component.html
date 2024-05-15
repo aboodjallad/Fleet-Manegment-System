@@ -1,0 +1,39 @@
+<router-outlet></router-outlet>
+<div class="add-entry-container">
+  <h3>What do you want to Update?</h3>
+  <select [(ngModel)]="selectedOption" (change)="onOptionChange()">
+    <option value="">Select an option</option>
+    <option value="driver">Driver</option>
+    <option value="vehicle">Vehicle</option>
+    <option value="vehicleInformation">Vehicle Information</option>
+  </select>
+
+  <div *ngIf="selectedOption === 'driver'">
+    <input type="text" placeholder="Driver ID" [(ngModel)]="driverId" name="driverId" required />
+    <button (click)="showSelectedDriver(driverId)">Select Driver</button>
+   <div *ngIf="isUpdateStep">
+    <input type="text" placeholder="Driver Name" [(ngModel)]="driverName" name="driverName" required />
+    <input type="text" placeholder="Phone Number" [(ngModel)]="phoneNumber" name="phoneNumber" required />
+    <button (click)="updateDriver()">Update Driver</button>
+    </div>
+</div>
+  <div *ngIf="selectedOption === 'vehicle'">
+    <input type="text" placeholder="Vehicle ID" [(ngModel)]="vehicleId" name="vehicleId" required />
+    <button (click)="showSelectedVehicle(vehicleId)">Select Vehicle</button>
+    <div *ngIf="isUpdateStep">
+        <input type="text" placeholder="Vehicle Number" [(ngModel)]="vehicleNumber" name="vehicleNumber" required />
+    <input type="text" placeholder="Vehicle Type" [(ngModel)]="vehicleType" name="vehicleType" required />
+    <button (click)="updateVehicle()">Add Vehicle</button>
+    </div>
+</div>
+  <div *ngIf="selectedOption === 'vehicleInformation'">
+    <input type="text" placeholder="Vehicle Id" [(ngModel)]="vehicleId" name="vehicleId" required />
+    <button (click)="showSelectedVehicleInformation(vehicleId)">Select Vehicle Information</button>
+    <div *ngIf="isUpdateStep">
+        <input type="text" placeholder="Vehicle Make" [(ngModel)]="vehicleMake" name="vehicleMake" required />
+        <input type="text" placeholder="Vehicle model" [(ngModel)]="vehicleModel" name="vehicleModel" required />
+        <input type="text" placeholder="Purchasedate" [(ngModel)]="purchaseDate" name="purchaseDate" required />
+        <button (click)="updateVehicleInformation()">Update Vehicle Information</button>
+    </div>
+</div>
+</div>

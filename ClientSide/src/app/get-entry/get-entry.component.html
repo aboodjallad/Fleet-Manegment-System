@@ -1,0 +1,142 @@
+<div class="add-entry-container">
+<h3>What do you want to display?</h3>
+  <select [(ngModel)]="selectedOption" (change)="onOptionChange()">
+    <option value="">Select an option</option>
+    <option value="drivers">Drivers</option>
+    <option value="vehicles">Vehicles</option>
+    <option value="vehicleInformation">Vehicles Informations</option>
+    <option value="routeHistory">Rote History</option>
+    <option value="geofences">Geofences</option>
+  </select>
+
+  <div *ngIf="selectedOption === 'drivers'">
+    <button (click)="getDrivers()">Get Drivers</button>
+    <table>
+      <thead>
+        <tr>
+          <th>Driver ID</th>
+          <th>Driver Name</th>
+          <th>Phonenumber</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of Drivers">
+          <td>{{ driver.driverid }}</td>
+          <td>{{ driver.drivername }}</td>
+          <td>{{ driver.phonenumber }}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div *ngIf="selectedOption === 'vehicles'">
+      <button (click)="getVehicles()">Get Vehicles</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Vehicle ID</th>
+            <th>Vehicle Number</th>
+            <th>Vehicle Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vehicle of Vehicles">
+            <td>{{ vehicle.vehicleid }}</td>
+            <td>{{ vehicle.vehiclenumber }}</td>
+            <td>{{ vehicle.vehicletype }}</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div *ngIf="selectedOption === 'vehicleInformation'" >
+        <button (click)="getVehiclesInformations()">Get Vehicle Information</button>
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle ID</th>
+              <th>Driver ID</th>
+              <th>Vehicle Make</th>
+              <th>Vehicle Model</th>
+              <th>Purchase Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vehicleInformation of VehiclesInformations">
+              <td>{{ vehicleInformation.vehicleid }}</td>
+              <td>{{ vehicleInformation.driverid }}</td>
+              <td>{{ vehicleInformation.vehiclemake }}</td>
+              <td>{{ vehicleInformation.vehiclemodel }}</td>
+              <td>{{ vehicleInformation.purchasedate }}</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div *ngIf="selectedOption === 'geofences'" >
+          <button (click)="getAllGeofences()">Get Geofences</button>
+          <table>
+            <thead>
+              <tr>
+                <th>Geofence ID</th>
+                <th>Geofence Type</th>
+                <th>Added Date</th>
+                <th>Stroke Color</th>
+                <th>Stroke Opacity</th>
+                <th>Stroke Weight</th>
+                <th>Fill Color</th>
+                <th>Fill Opacity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let geofence of Geofences">
+                <td>{{ geofence.geofenceid }}</td>
+                <td>{{ geofence.geofencetype }}</td>
+                <td>{{ geofence.addeddate }}</td>
+                <td>{{ geofence.strokecolor }}</td>
+                <td>{{ geofence.strokeopacity }}</td>
+                <td>{{ geofence.strokeweight }}</td>
+                <td>{{ geofence.fillcolor }}</td>
+                <td>{{ geofence.fillopacity }}</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+
+        <div *ngIf="selectedOption === 'routeHistory'" >
+          <select [(ngModel)]="selectedVehicle" (change)="onOptionChange()">
+            <option value="">Select Vehicle ID</option> 
+            <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
+          </select> 
+          <input type="text" placeholder="Start Time" [(ngModel)]="startTime" name="startime" required />
+          <input type="text" placeholder="End Time" [(ngModel)]="endTime" name="endtime" required />
+          <button (click)="getRoutes(selectedVehicle,startTime,endTime)">Get Route History</button>
+          <table>
+            <thead>
+              <tr>
+                <th>Vehicle Number</th>
+                <th>Vehicle ID</th>
+                <th>Vehicle Direction</th>
+                <th>Status</th>
+                <th>Vehicle Speed </th>
+                <th>Record Time </th>
+                <th>Address</th>
+                <th>GPS position</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let route of Routes">
+                <td>{{ route.vehiclenumber }}</td>
+                <td>{{ route.vehicleid }}</td>
+                <td>{{ route.vehicledirection }}</td>
+                <td>{{ route.status }}</td>
+                <td>{{ route.gpsspeed }}</td>
+                <td>{{ route.gpstime }}</td>
+                <td>{{ route.address }}</td>
+                <td>{{ route.position }}</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+    </div>
+  

@@ -1,22 +1,11 @@
-﻿
-using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Npgsql;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Npgsql;
 
-namespace Fleet_Manegment_System.Services
+namespace Fleet_Manegment_System.Services.General
 {
     internal class DatabaseConnection
     {
         private static volatile DatabaseConnection? _instance;
-        private static readonly object _lock = new object();
+        private static readonly object _lock = new();
         private NpgsqlConnection? _connection;
         private readonly string _connectionString = "Host=localhost; Port=5432; Database=abdalrahman_fms; Username=postgres; Password=123";
 
@@ -35,7 +24,7 @@ namespace Fleet_Manegment_System.Services
             catch (NpgsqlException ex)
             {
                 Console.WriteLine($"Failed to open database connection: {ex.Message}");
-                _connection = null;  
+                _connection = null;
             }
         }
 
@@ -76,7 +65,7 @@ namespace Fleet_Manegment_System.Services
             {
                 _connection.Close();
                 _connection.Dispose();
-                _connection = null; 
+                _connection = null;
             }
         }
     }

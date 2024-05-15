@@ -1,0 +1,287 @@
+/* General styling for the container */
+.add-entry-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-sizing: border-box;
+
+}
+  
+  /* Styling for headers within the container */
+  .add-entry-container h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Styling for form elements */
+  .add-entry-container select,
+  .add-entry-container input {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+  
+  /* Placeholder text color */
+  .add-entry-container input::placeholder {
+    color: #888;
+  }
+  
+  /* Styling for buttons */
+  .add-entry-container button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.6rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  
+  /* Hover effect for buttons */
+  .add-entry-container button:hover {
+    background-color: #0056b3;
+  }
+  /* vehicle-display.component.css */
+
+/* Container styles */
+.container {
+  display: flex;
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  height: 100vh; /* Set container height to viewport height */
+  background-color: #f0f0f2; /* Soft background color */
+}
+
+/* Table styles */
+table {
+  width: 90%; /* Adjusted for better spacing */
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+  margin: 20px auto; /* Center table in the container with margin */
+  border-radius: 8px; /* Rounded corners */
+}
+
+/* Header and cell styles */
+th, td {
+  padding: 15px; /* Increased padding for better readability */
+  text-align: center; /* Align content in the middle */
+  font-family: 'Arial', sans-serif; /* Modern font */
+}
+
+/* Alternating row colors */
+tr:nth-child(even) {
+  background-color: #f8f8f8; /* Lighter shade for a cleaner look */
+}
+
+/* Hover effect on rows */
+tr:hover {
+  background-color: #e8e8e8; /* Subtle hover effect */
+}
+
+/* Button styles */
+button {
+  background-color: #007BFF; /* Modern blue */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 6px; /* Slightly rounded for a modern look */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive table adjustments */
+@media screen and (max-width: 600px) {
+  table {
+    width: 100%;
+    border-radius: 0; /* Remove rounded corners on smaller screens */
+  }
+  
+  th, td {
+    border: none;
+    padding: 10px; /* Adjust padding for smaller screens */
+    display: block;
+    text-align: center; /* Align content in the middle */
+  }
+
+  th {
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+  }
+}
+
+.detailed-info-container {
+  margin-top: 20px; /* Adjust margin top as needed */
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+/* Navbar styles */
+
+
+/* General styling for the container */
+.add-entry-container {
+  max-width: 2000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Styling for headers within the container */
+.add-entry-container h3 {
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Styling for form elements */
+.add-entry-container select,
+.add-entry-container input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+/* Placeholder text color */
+.add-entry-container input::placeholder {
+  color: #888;
+}
+
+/* Styling for buttons */
+.add-entry-container button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for buttons */
+.add-entry-container button:hover {
+  background-color: #0056b3;
+}
+
+/* vehicle-display.component.css */
+
+/* Container styles */
+.container {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh; 
+  background-color: #f0f0f2; 
+}
+
+
+table {
+  width: 90%; /* Adjusted for better spacing */
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+  margin: 20px auto; /* Center table in the container with margin */
+  border-radius: 8px; /* Rounded corners */
+}
+
+/* Header and cell styles */
+th, td {
+  padding: 15px; /* Increased padding for better readability */
+  text-align: center; /* Align content in the middle */
+  font-family: 'Arial', sans-serif; /* Modern font */
+}
+
+/* Alternating row colors */
+tr:nth-child(even) {
+  background-color: #f8f8f8; /* Lighter shade for a cleaner look */
+}
+
+/* Hover effect on rows */
+tr:hover {
+  background-color: #e8e8e8; /* Subtle hover effect */
+}
+
+/* Button styles */
+button {
+  background-color: #007BFF; /* Modern blue */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 6px; /* Slightly rounded for a modern look */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive table adjustments */
+@media screen and (max-width: 600px) {
+  table {
+    width: 100%;
+    border-radius: 0; /* Remove rounded corners on smaller screens */
+  }
+  
+  th, td {
+    border: none;
+    padding: 10px; /* Adjust padding for smaller screens */
+    display: block;
+    text-align: center; /* Align content in the middle */
+  }
+
+  th {
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+  }
+}
+
+.detailed-info-container {
+  margin-top: 20px; /* Adjust margin top as needed */
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+}

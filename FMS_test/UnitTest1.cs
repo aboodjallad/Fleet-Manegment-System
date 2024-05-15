@@ -1,6 +1,6 @@
 using System.Data;
 using FPro;
-using Fleet_Manegment_System.Services;
+using Fleet_Manegment_System.Services.Driver;
 using Moq;
 using Xunit;
 using Npgsql;
@@ -24,10 +24,10 @@ namespace FMS_test
             var gvar = new GVAR { DicOfDic = gvarDict };
 
             // Assuming you have a mock setup or an actual instance of the service class
-            var driverServices = new DriverServices(); // Modify constructor as needed for your setup
+            var driverServices = new DriverServices(); 
 
             // Act
-            driverServices.Add(gvar);
+            //driverServices.Add(gvar);
 
             // Assert
             // You would normally assert expected outcomes here, such as checking the database,

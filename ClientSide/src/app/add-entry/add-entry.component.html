@@ -1,0 +1,65 @@
+<router-outlet></router-outlet>
+<div class="add-entry-container">
+  <h3>What do you want to add?</h3>
+  <select [(ngModel)]="selectedOption" (change)="onOptionChange()">
+    <option value="">Select an option</option>
+    <option value="driver">Driver</option>
+    <option value="vehicle">Vehicle</option>
+    <option value="assign-driver-to-vehicle">Assign driver to vehicle</option>
+    <option value="vehicleInformation">Vehicle Information</option>
+    <option value="routeHistory">Route History</option>
+  </select>
+
+  <div *ngIf="selectedOption === 'driver'">
+    <input type="text" placeholder="Driver Name" [(ngModel)]="driverName" name="driverName" required />
+    <input type="text" placeholder="Phone Number" [(ngModel)]="phoneNumber" name="phoneNumber" required />
+    <button (click)="addDriver(driverName, phoneNumber)">Add Driver</button>
+  </div>
+
+  <div *ngIf="selectedOption === 'assign-driver-to-vehicle'">
+    <select [(ngModel)]="selectedID" (change)="onOptionChange()">
+      <option value="">Select Driver ID</option> 
+      <option *ngFor="let driver of Drivers" [value]="driver.driverid">{{ driver.driverid }}</option>
+    </select>
+
+    <select [(ngModel)]="selectedVehicle" (change)="onOptionChange()">
+      <option value="">Select Vehicle ID</option> 
+      <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
+    </select>
+    <button (click)="assignDriver(selectedID,selectedVehicle)">Assign or Update</button>
+  </div>
+  <div *ngIf="selectedOption === 'vehicle'">
+    <input type="text" placeholder="Vehicle Number" [(ngModel)]="vehicleNumber" name="vehicleNumber" required />
+    <input type="text" placeholder="Vehicle Type" [(ngModel)]="vehicleType" name="vehicleType" required />
+    <button (click)="addVehicle(vehicleNumber, vehicleType)">Add Vehicle</button>
+  </div>
+  <div *ngIf="selectedOption === 'vehicleInformation'">
+      <select [(ngModel)]="selectedVehicle" (change)="onOptionChange()">
+        <option value="">Select Vehicle ID</option> 
+        <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
+      </select>   
+      <select [(ngModel)]="selectedID" (change)="onOptionChange()">
+        <option value="">Select Driver ID</option> 
+        <option *ngFor="let driver of Drivers" [value]="driver.driverid">{{ driver.driverid }}</option>
+      </select>  
+    <input type="text" placeholder="Vehicle Make" [(ngModel)]="vehicleMake" name="vehicleMake" required />
+    <input type="text" placeholder="Vehicle model" [(ngModel)]="vehicleModel" name="vehicleModel" required />
+    <input type="text" placeholder="Purchasedate" [(ngModel)]="purchaseDate" name="purchaseDate" required />
+    <button (click)="addVehicleInformation(selectedVehicle, selectedID,vehicleMake,vehicleModel,purchaseDate)">Add Vehicle Information</button>
+  </div>
+  <div *ngIf="selectedOption === 'routeHistory'">
+    <select [(ngModel)]="selectedID" (change)="onOptionChange()">
+      <option value="">Select Vehicle ID</option> 
+      <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
+    </select>    
+
+    <input type="text" placeholder="Vehicle Direction" [(ngModel)]="vehicleDirection" name="vehicleDirection" required />
+    <input type="text" placeholder="Status" [(ngModel)]="status" name="status" required />
+    <input type="text" placeholder="Vehicle Speed" [(ngModel)]="vehicleSpeed" name="vehicleSpeed" required />
+    <input type="text" placeholder="Record Time" [(ngModel)]="recordTime" name="recordTime" required />
+    <input type="text" placeholder="Address" [(ngModel)]="address" name="address" required />
+    <input type="text" placeholder="Latitude" [(ngModel)]="latitude" name="latitude" required />
+    <input type="text" placeholder="Longitude" [(ngModel)]="longitude" name="longitude" required />
+    <button (click)="addRouteHistory(selectedID,vehicleDirection,status,vehicleSpeed,recordTime,address,latitude,longitude)">Add Route History</button>
+  </div>
+</div>

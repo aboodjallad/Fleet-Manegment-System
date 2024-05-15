@@ -1,0 +1,57 @@
+/* General styling for the container */
+.add-entry-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-sizing: border-box;
+
+}
+  
+  /* Styling for headers within the container */
+  .add-entry-container h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Styling for form elements */
+  .add-entry-container select,
+  .add-entry-container input {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+  
+  /* Placeholder text color */
+  .add-entry-container input::placeholder {
+    color: #888;
+  }
+  
+  /* Styling for buttons */
+  .add-entry-container button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.6rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect for buttons */
+  .add-entry-container button:hover {
+    background-color: #0056b3;
+  }
+  
