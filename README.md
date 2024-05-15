@@ -9,7 +9,7 @@
 
 Click the image below to play the demo video:
 
-[![Demo Video](https://youtu.be/Jgt5kz8P6h4)
+[![Demo Video](https://youtu.be/Jgt5kz8P6h4)(https://youtu.be/Jgt5kz8P6h4)
 
 ## Installation
 
