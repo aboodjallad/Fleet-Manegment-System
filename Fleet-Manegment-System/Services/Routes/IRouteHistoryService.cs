@@ -12,5 +12,7 @@ namespace Fleet_Manegment_System.Services.Routes
     {
         GVAR GetRouteHistory(GVAR gvar);
         bool AddRouteHistory(ConcurrentDictionary<string, string> dictionary);
+
+        GVAR GetLastRouteHistory(GVAR gVAR);
     }
 }

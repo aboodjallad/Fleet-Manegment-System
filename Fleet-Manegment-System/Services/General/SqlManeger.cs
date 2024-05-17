@@ -36,6 +36,7 @@ namespace Fleet_Manegment_System.Services.General
             GetAllCircularGeofences = 22,
             GetAllPolygonGeofences = 23,
             GetAllRectangularGeofences = 24,
+            GetLastRouteHistory = 25,
 
         }
 
@@ -101,7 +102,27 @@ namespace Fleet_Manegment_System.Services.General
                     WHERE V.VehicleID = @VehicleID
                     AND CAST(RH.RecordTime AS BIGINT) >= @StartTime
                     AND CAST(RH.RecordTime AS BIGINT) <= @EndTime
-                    ORDER BY RH.RecordTime;";
+                    ORDER BY RH.RecordTime
+                    DESC;";
+                case SqlCommands.GetLastRouteHistory:
+                    return @"
+                    SELECT
+                    V.VehicleID,
+                     V.VehicleNumber,
+                    RH.Address,
+                    RH.Status,
+                     RH.Latitude,
+                     RH.Longitude ,
+                    RH.VehicleDirection,
+                    RH.VehicleSpeed AS GPSSpeed,
+                    RH.RecordTime AS GPSTime
+                    FROM Vehicles V
+                    JOIN RouteHistory RH ON V.VehicleID = RH.VehicleID
+                    WHERE V.VehicleID = @VehicleID
+                    AND CAST(RH.RecordTime AS BIGINT) >= @StartTime
+                    AND CAST(RH.RecordTime AS BIGINT) <= @EndTime
+                    ORDER BY RH.RecordTime
+                    DESC;";
                 case SqlCommands.GetAllGeofences:
                     return "SELECT * FROM geofences";
                 case SqlCommands.GetAllCircularGeofences:

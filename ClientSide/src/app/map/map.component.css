@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 88vh;
+    width: 1850px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .header label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .header select {
+    padding: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+  
+  .map {
+    flex-grow: 1;
+    height: 100%;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    margin: 10px;
+  }
+  

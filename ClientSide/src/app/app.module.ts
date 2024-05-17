@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { DeleteEntryComponent } from './delete-entry/delete-entry.component';
 import { UpdateEntryComponent } from './update-entry/update-entry.component';
 import { GetEntryComponent } from './get-entry/get-entry.component';
+import { MapComponent } from './map/map.component';
 
 
 // Other component imports
@@ -29,6 +30,7 @@ const routes: Routes = [
     DeleteEntryComponent,
     UpdateEntryComponent,
     GetEntryComponent,
+    MapComponent,
     // other components
   ],
   imports: [

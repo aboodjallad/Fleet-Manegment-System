@@ -5,6 +5,7 @@ import { AddEntryComponent } from './add-entry/add-entry.component';
 import { DeleteEntryComponent } from './delete-entry/delete-entry.component';
 import { UpdateEntryComponent } from './update-entry/update-entry.component';
 import { GetEntryComponent } from './get-entry/get-entry.component';
+import { MapComponent } from './map/map.component';
 
 const routes: Routes = [
   { path: 'add-entry', component: AddEntryComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'delete-entry', component: DeleteEntryComponent },
   { path: 'update-entry', component: UpdateEntryComponent },
   { path: 'get-entry', component: GetEntryComponent},
+  { path: 'map', component: MapComponent},
   { path: '', redirectTo: 'home', pathMatch : 'full' },
   { path: '**', redirectTo: '' } 
 ];

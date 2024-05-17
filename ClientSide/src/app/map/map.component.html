@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="header">
+    <label for="vehicle-select">Select Vehicle:</label>
+    <select [(ngModel)]="Selected" (change)="onOptionChange()">
+      <option value="Select Vehicle ID">Select Vehicle ID</option> 
+      <option *ngFor="let vehicle of Vehicles" [value]="vehicle.vehicleid">{{ vehicle.vehicleid }}</option>
+    </select>
+    <button (click)="getCordenates(Selected)">Go TO Vehicle</button>
+  </div>
+  <div id="map" class="map"></div>
+</div>

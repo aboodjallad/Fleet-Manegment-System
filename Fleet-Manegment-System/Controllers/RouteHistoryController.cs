@@ -37,6 +37,24 @@ namespace Fleet_Manegment_System.Controllers
             return Ok(routeHistoryData);
         }// done
 
+        [HttpPost("getLastRouteHistory")]
+        [Produces("application/json")]
+        public ActionResult<GVAR> GetLastRouteHistory([FromBody] GVAR gvar)
+        {
+            if (gvar == null)
+            {
+                return BadRequest("Invalid or missing GVAR data.");
+            }
+
+            var routeHistoryData = _routeHistoryService.GetLastRouteHistory(gvar);
+            if (routeHistoryData == null)
+            {
+                return NotFound("No route history data found for the provided criteria.");
+            }
+
+            return Ok(routeHistoryData);
+        }// done
+
         [HttpPost("addRouteHistory")]
         public IActionResult AddRouteHistory([FromBody] GVAR gvar)
         {
