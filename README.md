@@ -16,7 +16,7 @@ https://youtu.be/Jgt5kz8P6h4
 
 * After cloning the repository open your VS 2022 
 * Open Fleet-Management-System\Services\General\DatabaseConnection.cs
-* You can find the copy of the Database in https://drive.google.com/file/d/1AAAxvQsyC3aanQNhYHC8_tvhWMAnfnuL/view?usp=drive_link
+* You can find the copy of the Database in https://drive.google.com/file/d/1lB9r-JZ3eXRmuCy93VVGyc_YJAFvgoYX/view?usp=sharing
 * Adjust the connection string in Fleet-Manegment-System\Fleet-Manegment-System\Services\General\DatabaseConnection.cs with your DB info as :
 ```bash
 _connectionString = "Host=localhost; Port=5432; Database=DatabaseName; Username=UrUsername; Password=UrPassword";
