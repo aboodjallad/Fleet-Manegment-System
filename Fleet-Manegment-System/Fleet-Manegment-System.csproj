@@ -37,7 +37,7 @@
 
 	<ItemGroup>
 	  <Reference Include="FPro">
-	    <HintPath>..\..\..\..\Desktop\FMS\FPro.dll</HintPath>
+	    <HintPath>..\..\..\..\Desktop\FPro.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 </Project>
