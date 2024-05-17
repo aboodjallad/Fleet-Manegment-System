@@ -365,7 +365,6 @@ ALTER TABLE ONLY public.vehicles ALTER COLUMN vehicleid SET DEFAULT nextval('pub
 --
 
 COPY public.circlegeofence (id, geofenceid, radius, latitude, longitude) FROM stdin;
-1	1	100	40	-74
 \.
 
 
@@ -374,23 +373,9 @@ COPY public.circlegeofence (id, geofenceid, radius, latitude, longitude) FROM st
 --
 
 COPY public.driver (driverid, drivername, phonenumber) FROM stdin;
-10	John Doe	555123456
-11	abood	595793983
-12	Alice Johnson	555654321
-13	Jane Smith	555987654
-15	erer	987654321
-16	erer	987654321
-17	erer	987654321
-19	jehad	1234321
-20	jehad	1234321
-21	jehad	1234321
-14	jodo	1234
-9	Default	741
-23	jehad	595793983
-24	jehad	595793983
-26	jojo	595793983
-27	mutaz	123455555
-2	ahmad	123456
+29	jehad	595793983
+30	mutaz	987654321
+31	mohammed	595796654
 \.
 
 
@@ -399,9 +384,6 @@ COPY public.driver (driverid, drivername, phonenumber) FROM stdin;
 --
 
 COPY public.geofences (geofenceid, geofencetype, addeddate, strokecolor, strokeopacity, strokeweight, fillcolor, fillopacity) FROM stdin;
-1	Circular	1596230400000	Red	1	2	Blue	1
-2	Rectangular	1598918400000	Blue	1	3	Green	1
-3	Polygon	1601510400000	Green	1	1	Yellow	0
 \.
 
 
@@ -410,9 +392,6 @@ COPY public.geofences (geofenceid, geofencetype, addeddate, strokecolor, strokeo
 --
 
 COPY public.polygongeofence (id, geofenceid, latitude, longitude) FROM stdin;
-1	3	41	-73
-2	3	39	-75
-3	3	37	-77
 \.
 
 
@@ -421,7 +400,6 @@ COPY public.polygongeofence (id, geofenceid, latitude, longitude) FROM stdin;
 --
 
 COPY public.rectanglegeofence (id, geofenceid, north, east, west, south) FROM stdin;
-1	2	42	-72	-78	36
 \.
 
 
@@ -430,38 +408,9 @@ COPY public.rectanglegeofence (id, geofenceid, north, east, west, south) FROM st
 --
 
 COPY public.routehistory (routehistoryid, vehicleid, vehicledirection, status, vehiclespeed, recordtime, address, latitude, longitude) FROM stdin;
-1	1	180	1	60 km/h	1596230400000	123 Main St	40	-74
-2	2	90	0	50 km/h	1598918400000	456 Elm St	38	-75
-3	3	270	1	70 km/h	1601510400000	789 Oak St	37	-76
-6	1	123	a	12	123434	blus	-90	88
-7	2	10	b	jhuhjbhjg	100000000	shjgjhvggjh	0	100000000
-8	2	10	b	jhuhjbhjg	100000000	shjgjhvggjh	0	100000000
-9	2	10	b	jhuhjbhjg	100000000	shjgjhvggjh	0	100000000
-10	3	10	s	jhuhjbhjg	100000000	shjgjhvggjh	0	100000000
-11	1	123	r	50	2545676879	Paltel General administration building, Rafidia , Nablus , Palestine	34	43
-12	1	123	r	50	2545676879	Paltel General administration building, Rafidia , Nablus , Palestine	34	43
-13	2	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-14	3	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-15	1	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-16	3	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-17	10	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-18	11	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-19	3	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-20	8	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	90
-21	8	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	100
-22	1	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-23	3	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-24	12	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-25	6	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	54
-26	10	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	89
-27	8	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	89
-28	1	12	k	12	123456	sdfsdf	123	321
-29	11	12	k	12	123456	sdfsdf	123	321
-30	9	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	89
-31	1	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	89
-32	6	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	89
-33	11	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	89
-34	6	342423	w	123	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	45	89
+37	14	789	s	14	123456789	Paltel General administration building, Rafidia , Nablus , Palestine	0	0
+38	15	12	A	12 K/H	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	0	0
+39	16	5	D	80 k/h	1234567	Paltel General administration building, Rafidia , Nablus , Palestine	0	0
 \.
 
 
@@ -470,16 +419,9 @@ COPY public.routehistory (routehistoryid, vehicleid, vehicledirection, status, v
 --
 
 COPY public.vehicles (vehicleid, vehiclenumber, vehicletype) FROM stdin;
-3	345678	Truck
-1	1234	toto
-5	0	
-6	0	
-8	0	
-9	0	
-10	12345654	Sport
-11	567765	Sport
-12	7896541	Sport
-2	23456789	Sedan
+14	0	Sport
+15	0	SUV
+16	0	Sport
 \.
 
 
@@ -488,15 +430,9 @@ COPY public.vehicles (vehicleid, vehiclenumber, vehicletype) FROM stdin;
 --
 
 COPY public.vehiclesinformations (vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) FROM stdin;
-\N	2	BMW	M5	8789465
-9	11	k	k	1454556
-6	12	Hondaaaaaa	M5	15989184
-8	10	Hondaaaaaa	M5	15989184
-\N	10	Hondaaaaaa	M5	15989184
-\N	21	Honda	M5	1234678999
-3	11	Hondaaaaaa	M55	15989184
-3	11	Hondaaaaaa	M55	15989184
-5	11	bmw	21002	123456
+14	29	BMW	M5	1234678999
+15	30	Honda	Civic	12346845412154
+16	31	VW	Golf	3456764333
 \.
 
 
@@ -511,7 +447,7 @@ SELECT pg_catalog.setval('public.circlegeofence_id_seq', 1, true);
 -- Name: driver_driverid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driver_driverid_seq', 27, true);
+SELECT pg_catalog.setval('public.driver_driverid_seq', 31, true);
 
 
 --
@@ -539,14 +475,14 @@ SELECT pg_catalog.setval('public.rectanglegeofence_id_seq', 1, true);
 -- Name: routehistory_routehistoryid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.routehistory_routehistoryid_seq', 34, true);
+SELECT pg_catalog.setval('public.routehistory_routehistoryid_seq', 39, true);
 
 
 --
 -- Name: vehicles_vehicleid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehicles_vehicleid_seq', 12, true);
+SELECT pg_catalog.setval('public.vehicles_vehicleid_seq', 16, true);
 
 
 --
